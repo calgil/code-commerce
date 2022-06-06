@@ -1,12 +1,10 @@
 import './App.css';
-import './components/CodeCommerce/CodeCommerce.jsx'
+import CodeCommerce from './components/CodeCommerce/CodeCommerce.jsx';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-
-      </header>
+    <div className="App App-header">
+      <CodeCommerce />
     </div>
   );
 }
