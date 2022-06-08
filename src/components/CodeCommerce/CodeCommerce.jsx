@@ -6,7 +6,8 @@ class CodeCommerce extends React.Component {
     constructor() {
         super();
         this.state = {
-            
+            // loggedIn: false,
+            // I guess when this is true signIn will not display and the next part of the app can be displayed
         }
     }
     render(){

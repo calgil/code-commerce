@@ -1,15 +1,75 @@
 .sign-in {
-    width: 60%;
+    max-width: 500px;
     margin: 0 auto;
     background-color: #fff;
     color: #333;
-    padding: 0.5rem;
+    padding: 0.75rem;
     border-radius: 5px;
 }
 
+form { padding: 0 20px; }
+
 .radio-container {
-    width: 50%;
-    margin: 0 auto;
+    width: 100%;
     display: flex;
     justify-content: space-around;
+    margin-bottom: 2rem;
+}
+
+.sign-in .radio-container label { font-size: 16px; }
+
+.sign-in label { font-size: 14px; }
+
+.radio-container input { margin-right: 0.75rem; }
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+  }
+
+.btn-wrapper {
+    margin-top: 1rem;
+    text-align: center;
+}
+
+input[type="submit"] {
+    background: #e43c2a;
+    border: 1px solid #e43c2a;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 0.5rem;
+}
+
+.line { 
+    display: flex;
+    margin: 0.75rem 0;
+    font-size: 0.75rem;
+ }
+
+.rule { width: 40%; }
+
+.btn-wrapper input[type="submit"].facebook {
+    background: #1877f2;
+    border: 1px solid #1877f2;
+}
+
+.cancel { 
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 0.85rem;
+ }
+
+.tos { margin-top: 1rem; }
+
+.tos a { 
+    color: #333;
+    margin: 0 0.5rem;
+    font-size: 0.75rem;
 }
