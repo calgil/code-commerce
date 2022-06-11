@@ -1,8 +1,8 @@
 import React from "react";
-import './SignIn.css';
+import style from './SignIn.module.css';
 import RadioBase from "../RadioBase/RadioBase";
 import InputBase from "../InputBase/InputBase";
-import { emailValidation } from "./validations";
+import { emailValidation, passwordValidation } from "./validations";
 
 
 class SignIn extends React.Component {
@@ -25,7 +25,6 @@ class SignIn extends React.Component {
     };
 
     handleValidation = (type, value) => {
-        console.log('handle', type, value);
         let errorText;
         switch(type){
             case 'email':
@@ -33,7 +32,16 @@ class SignIn extends React.Component {
                 this.setState((prevState) => ({
                     error: {
                         ...prevState.error,
-                        emailError:errorText
+                        emailError: errorText
+                    }
+                }))
+                break;
+            case 'password':
+                errorText = passwordValidation(value);
+                this.setState((prevState) => ({
+                    error: {
+                        ...prevState.error,
+                        passwordError: errorText
                     }
                 }))
                 break;
@@ -41,14 +49,17 @@ class SignIn extends React.Component {
                 default:
                     break;
         }
-        console.log('end', errorText);
+    }
+
+    passwordVisible = () => {
+        console.log('click');
     }
 
     handleBlur = ( { target: { name, value }} ) => { this.handleValidation(name, value) }
 
-    handleChange = () => {
+    // handleChange = () => {
 
-    }
+    // }
 
     handleSubmit(e){
         e.preventDefault();
@@ -58,27 +69,16 @@ class SignIn extends React.Component {
     render() {
         const {newAccount} = this.state;
 
-        // const radioData = [
-        //     {name: 'account',labelText: 'Sign In', type: 'radio',  },
-        //     {name: 'account',labelText: 'Create Account', type: 'radio',  },
-        // ];
-
-        const inputData = [
-            {name: 'email', labelText: 'Your E-Mail Address *', type: 'email',  },
-            {name: 'password', labelText: 'Password *', type: 'text', },
-        ];
-
         const newAccountInputs = [
-            {name: 'confirm-password', labelText: 'Confirm Password *', type: 'text', },
             {name: 'first-name', labelText: 'First Name *', type: 'text', },
             {name: 'surname', labelText: 'Surname *', type: 'text', },
             {name: 'postcode', labelText: 'Postcode *', type: 'number', },
         ]
 
         return (
-            <div className="sign-in">
+            <div className={style.signIn}>
                 <form onSubmit={this.handleSubmit}>
-                    <div className="radio-container">
+                    <div className={style.radioContainer}>
                             <RadioBase 
                                 name='account'
                                 labelText='Sign In'
@@ -97,31 +97,47 @@ class SignIn extends React.Component {
                             />
                             
                     </div>
-                    <div className="inputs">
-                            {inputData.map((item) => (
-                                <InputBase
-                                    labelText={item.labelText}
-                                    name={item.name}
-                                    type={item.type}
-                                    onBlur={this.handleBlur}
-                                    onChange={this.handleChange}
-                                 />
-                            ))}
+                    <div className={style.inputs}>
+                            <InputBase
+                                labelText={'Your E-Mail Address *'}
+                                name={'email'}
+                                type={'email'}
+                                onBlur={this.handleBlur}
+                                autoComplete="off"
+                            />
+                             <InputBase
+                                className={style.password}
+                                labelText={'Password *'}
+                                name={'password'}
+                                type={'password'}
+                                onBlur={this.handleBlur}
+                                visible={this.passwordVisible}
+                                autoComplete="off"
+                            />
+                            {newAccount && <InputBase
+                                className={style.password}
+                                labelText={'Confirm Password *'}
+                                name={'password'}
+                                type={'password'}
+                                onBlur={this.handleBlur}
+                                autoComplete="off"
+                            />}
                             {newAccount && newAccountInputs.map((item) => (
                                 <InputBase
                                 labelText={item.labelText}
                                 type={item.type}
                                 onBlur={this.handleBlur}
                                 onChange={this.handleChange}
+                                autoComplete="off"
                                 />
                             ))}
                     </div>
-                    <div className="btn-wrapper">
+                    <div className={style.btnWrapper}>
                         <InputBase type='submit' value={newAccount ?'SAVE' : 'LOGIN'} />
-                        <div className="line"><hr className="rule" /> <span>or</span> <hr className="rule" /></div>
-                        <InputBase className="facebook" type='submit' value={newAccount ?'SIGN UP WITH FACEBOOK' : 'SIGN IN WITH FACEBOOK'} />
-                        <span className="cancel">Cancel</span>
-                        <div className="tos">
+                        <div className={style.line}><hr className={style.rule} /> <span>or</span> <hr className={style.rule} /></div>
+                        <InputBase className={style.facebook} type='submit' value={newAccount ?'SIGN UP WITH FACEBOOK' : 'SIGN IN WITH FACEBOOK'} />
+                        <span className={style.cancel}>Cancel</span>
+                        <div className={style.tos}>
                             <a href="www">Privacy Policy and Cookies</a>
                             <span>|</span>
                             <a href="www">Terms of Sale and Use</a>

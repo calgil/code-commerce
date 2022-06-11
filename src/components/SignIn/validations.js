@@ -9,3 +9,14 @@ export const emailValidation = (value) => {
         }
     }
 }
+
+export const passwordValidation = (value) => {
+    const passwordRegEx = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/g;
+    if(value) {
+        if(passwordRegEx.test(value) && value.length > 8 && value.length < 20){
+            return undefined
+        } else {
+            return 'Password must meet criteria'
+        }
+    }
+}

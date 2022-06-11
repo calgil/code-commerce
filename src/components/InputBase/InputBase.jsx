@@ -1,10 +1,19 @@
 import React from "react";
-import './InputBase.css';
+import s from './InputBase.module.css';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const InputBase = ({labelText, type, ...props}) => (
-        <label>
+
+const InputBase = ({ labelText, ...props}) => (
+        <label className={props.className}>
             {labelText}
-            <input className="input-root" type={type} {...props} />
+            <input type={props.type} {...props} />
+            {labelText === 'Password *' && 
+                <FontAwesomeIcon 
+                    className={s.eye} 
+                    icon={faEye}
+                    onClick={props.visible} 
+                />}
         </label>
 )
 

@@ -1,7 +1,7 @@
-.sign-in {
+.signIn {
     max-width: 500px;
     margin: 0 auto;
-    background-color: #fff;
+    background-color: #FFFFFFE5;
     color: #333;
     padding: 0.75rem;
     border-radius: 5px;
@@ -9,18 +9,34 @@
 
 form { padding: 0 20px; }
 
-.radio-container {
+.radioContainer {
     width: 100%;
     display: flex;
     justify-content: space-around;
     margin-bottom: 2rem;
 }
 
-.sign-in .radio-container label { font-size: 16px; }
+.sign-in .radioContainer label { font-size: 16px; }
 
-.sign-in label { font-size: 14px; }
+.signIn label { font-size: 14px; }
 
-.radio-container input { margin-right: 0.75rem; }
+.radioContainer input { margin-right: 0.75rem; }
+
+.inputs input, 
+.btn-wrapper input {
+    display: block;
+    width: 100%;
+    padding: 0.35rem;
+    margin-top: 0.25rem;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: none;
+}
+
+.inputs input:focus {
+    outline: none;
+}
 
 input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button {
@@ -32,19 +48,29 @@ input[type=number] {
     -moz-appearance: textfield;
   }
 
-.btn-wrapper {
+.btnWrapper {
     margin-top: 1rem;
     text-align: center;
+    /* width: 80%;
+    margin-left: auto;
+    margin-right: auto; */
 }
 
 input[type="submit"] {
     background: #e43c2a;
     border: 1px solid #e43c2a;
+    border-radius: 10px;
     color: white;
     font-size: 20px;
     font-weight: bold;
     cursor: pointer;
     margin-top: 0.5rem;
+    min-width: 200px;
+    /* width: 100%; */
+}
+
+.password {
+    position: relative;
 }
 
 .line { 
@@ -55,15 +81,18 @@ input[type="submit"] {
 
 .rule { width: 40%; }
 
-.btn-wrapper input[type="submit"].facebook {
+.btnWrapper .facebook input[type="submit"] {
     background: #1877f2;
     border: 1px solid #1877f2;
+    padding: 0.25rem 0.5rem;
 }
 
 .cancel { 
     text-decoration: underline;
     cursor: pointer;
     font-size: 0.85rem;
+    display: block;
+    margin-top: 1rem;
  }
 
 .tos { margin-top: 1rem; }
