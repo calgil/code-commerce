@@ -2,7 +2,18 @@ import React from "react";
 import style from './SignIn.module.css';
 import RadioBase from "../RadioBase/RadioBase";
 import InputBase from "../InputBase/InputBase";
-import { emailValidation, passwordValidation } from "./validations";
+import { 
+    emailValidation, 
+    passwordValidation, 
+    confirmPasswordValidation, 
+    onlyTextValidation,
+    postCodeValidation
+} from "./validations";
+
+// const INIT_LOGIN = {
+//     email: '',
+//     password: '',
+// }
 
 
 class SignIn extends React.Component {
@@ -11,9 +22,8 @@ class SignIn extends React.Component {
         this.state = {
             isLoggedIn: false,
             newAccount: false,
-            userLoginData: {
-                email: '',
-            },
+            showPassword: false,
+            userLoginData: {},
             error: {},
         }
     }
@@ -23,6 +33,10 @@ class SignIn extends React.Component {
     handleRadioChange = () => {
         this.setState({ newAccount: !this.state.newAccount })
     };
+
+    passwordVisible = () => {
+        this.setState({ showPassword: !this.state.showPassword })
+    }
 
     handleValidation = (type, value) => {
         let errorText;
@@ -43,42 +57,122 @@ class SignIn extends React.Component {
                         ...prevState.error,
                         passwordError: errorText
                     }
+                }));
+                if(errorText === undefined){
+                    this.setState({
+                        userLoginData: {
+                            password: value,
+                        }
+                    })
+                }
+                break;
+            case 'confirmPassword':
+                const {password} = this.state.userLoginData
+                errorText = confirmPasswordValidation(value, password);
+                this.setState((prevState) => ({
+                    error: {
+                        ...prevState.error,
+                        confirmPasswordError: errorText,
+                    }
                 }))
                 break;
-
+            case 'firstName':
+                errorText = onlyTextValidation(value);
+                this.setState((prevState) => ({
+                    error: {
+                        ...prevState.error,
+                        firstNameError: errorText,
+                    }
+                }))
+                break;
+            case 'lastName':
+                errorText = onlyTextValidation(value);
+                this.setState((prevState) => ({
+                    error: {
+                        ...prevState.error,
+                        lastNameError: errorText,
+                    }
+                }))
+                break;
+            case 'postcode':
+                errorText = postCodeValidation(value);
+                this.setState((prevState) => ({
+                    error: {
+                        ...prevState.error,
+                        postCodeError: errorText,
+                    }
+                }))
+                break;
                 default:
                     break;
         }
     }
 
-    passwordVisible = () => {
-        console.log('click');
-    }
-
     handleBlur = ( { target: { name, value }} ) => { this.handleValidation(name, value) }
 
-    // handleChange = () => {
-
-    // }
-
-    handleSubmit(e){
-        e.preventDefault();
+    handleChange= ({ target: { name, value }}) => {
+        this.setState((prevState) => ({
+            userLoginData: {
+                ...prevState.userLoginData,
+                [name]: value,
+            }
+        }))
     }
+
+    validateLogin = () => {
+        const { userLoginData, error } = this.state;
+        let errorValue = {}; 
+        let isError = false;
+        Object.keys(userLoginData).forEach((val) => {
+            if(!userLoginData[val].length){
+                errorValue = { ...errorValue, [`${val}Error`]: `Required`};
+                isError = true;
+            }
+        });
+        Object.keys(error).forEach((val) => {
+            if(error[val]){
+                isError = true;
+            }
+        })
+        this.setState({ error: errorValue });
+        Object.keys(userLoginData).forEach((val) => {
+            if(userLoginData[val].length) {
+                this.handleValidation(val, userLoginData[val]);
+            }
+        })
+            return isError;
+
+    }
+
+    handleLogin = (e) => {
+        e.preventDefault();
+        let errorCheck = this.validateLogin();
+        console.log(errorCheck);
+        // if(!errorCheck) {
+        //     this.setState({
+        //         userLoginData: INIT_LOGIN,
+        //     })
+        // }
+    }
+
 
 
     render() {
-        const {newAccount} = this.state;
+        const {newAccount, showPassword, error} = this.state;
 
         const newAccountInputs = [
-            {name: 'first-name', labelText: 'First Name *', type: 'text', },
-            {name: 'surname', labelText: 'Surname *', type: 'text', },
-            {name: 'postcode', labelText: 'Postcode *', type: 'number', },
+            {key: 4,name: 'firstName', labelText: 'First Name *', type: 'text', error: 'firstNameError' },
+            {key: 5,name: 'lastName', labelText: 'Surname *', type: 'text', error: 'lastNameError' },
+            {key: 6,name: 'postcode', labelText: 'Postcode *', type: 'number', error: 'postCodeError' },
         ]
 
         return (
-            <div className={style.signIn}>
-                <form onSubmit={this.handleSubmit}>
+                <form 
+                    onSubmit={this.handleLogin}
+                    className={style.signIn}
+                >
                     <div className={style.radioContainer}>
+                        {/* I feel like this should be built better? Map through data? */}
                             <RadioBase 
                                 name='account'
                                 labelText='Sign In'
@@ -99,36 +193,71 @@ class SignIn extends React.Component {
                     </div>
                     <div className={style.inputs}>
                             <InputBase
+                                key={1}
                                 labelText={'Your E-Mail Address *'}
                                 name={'email'}
                                 type={'email'}
                                 onBlur={this.handleBlur}
                                 autoComplete="off"
+                                errorM={
+                                    (error
+                                    && error['emailError']
+                                    && error['emailError'].length > 1)
+                                    ? error['emailError']
+                                    : null
+                                }
                             />
                              <InputBase
+                                key={2}
                                 className={style.password}
                                 labelText={'Password *'}
                                 name={'password'}
-                                type={'password'}
+                                type={showPassword? 'text' : 'password'}
                                 onBlur={this.handleBlur}
-                                visible={this.passwordVisible}
+                                onClick={this.passwordVisible}
+                                visibility={showPassword}
                                 autoComplete="off"
+                                errorM={
+                                    (error
+                                    && error['passwordError']
+                                    && error['passwordError'].length > 1)
+                                    ? error['passwordError']
+                                    : null
+                                }
                             />
                             {newAccount && <InputBase
-                                className={style.password}
+                                key={3}
                                 labelText={'Confirm Password *'}
                                 name={'password'}
-                                type={'password'}
+                                type={showPassword? 'text' : 'password'}
                                 onBlur={this.handleBlur}
+                                onClick={this.passwordVisible}
+                                visibility={showPassword}
                                 autoComplete="off"
+                                errorM={
+                                    (error
+                                    && error['confirmPasswordError']
+                                    && error['confirmPasswordError'].length > 1)
+                                    ? error['confirmPasswordError']
+                                    : null
+                                }
                             />}
                             {newAccount && newAccountInputs.map((item) => (
                                 <InputBase
+                                key={item.key}
+                                name={item.name}
                                 labelText={item.labelText}
                                 type={item.type}
                                 onBlur={this.handleBlur}
                                 onChange={this.handleChange}
                                 autoComplete="off"
+                                errorM={
+                                    (error
+                                    && error[item.error]
+                                    && error[item.error].length > 1)
+                                    ? error[item.error]
+                                    : null
+                                }
                                 />
                             ))}
                     </div>
@@ -144,7 +273,6 @@ class SignIn extends React.Component {
                         </div>
                     </div>
                 </form>
-            </div>
         )
     }
 }

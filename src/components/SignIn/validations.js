@@ -20,3 +20,34 @@ export const passwordValidation = (value) => {
         }
     }
 }
+
+export const confirmPasswordValidation = (value, password) => {
+    if(value === password) {
+        return undefined
+    } else {
+        return 'Passwords do not match'
+    }
+}
+
+export const onlyTextValidation = (value) => {
+    if (value) {
+        if(/^[a-zA-Z ]*$/i.test(value)) {
+            return undefined
+        } else {
+            return 'Alphabetical letters only'
+        }
+    } 
+    else {
+        return undefined;
+    }
+}
+
+export const postCodeValidation = (value) => {
+    if(value.length < 4) {
+        return 'Incomplete Postal Code'
+    } else if (value.length > 10) {
+        return 'Postal Code too long'
+    } else {
+        return undefined
+    }
+}
