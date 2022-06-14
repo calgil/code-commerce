@@ -14,7 +14,7 @@ const InputBase = ({ labelText, ...props}) => (
                     &&
                     <FontAwesomeIcon 
                         className={s.eye} 
-                        icon={props.visibility ? faEye : faEyeSlash }
+                        icon={props.visibility === 'true' ? faEye : faEyeSlash }
                         onClick={props.passwordVisible} 
                     />}
                     {props.error && <div className={s.error}>{props.error}</div>}

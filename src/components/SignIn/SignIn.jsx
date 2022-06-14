@@ -10,13 +10,14 @@ import {
     postCodeValidation
 } from "./validations";
 
-const INIT_LOGIN = {
+const USER_DATA = {
     email: '',
     password: '',
     confirmPassword: '',
     firstName: '',
     lastName: '',
     postcode: '',
+    isLoggedIn: false,
 }
 
 
@@ -24,14 +25,12 @@ class SignIn extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoggedIn: false,
             newAccount: false,
             showPassword: false,
-            userLoginData: INIT_LOGIN,
+            user: USER_DATA,
             error: {},
         }
     }
-
 
     // This is the way to alternate between two states
     handleRadioChange = () => {
@@ -62,13 +61,6 @@ class SignIn extends React.Component {
                         passwordError: errorText
                     }
                 }));
-                // if(errorText === undefined){
-                //     this.setState({
-                //         userLoginData: {
-                //             password: value,
-                //         }
-                //     })
-                // }
                 break;
             case 'confirmPassword':
                 const {password} = this.state.userLoginData
@@ -123,12 +115,12 @@ class SignIn extends React.Component {
         }))
     }
 
-    validateLogin = () => {
-        const { userLoginData, error } = this.state;
+    validateCreateNewAccount = () => {
+        const { user, error } = this.state;
         let errorValue = {}; 
         let isError = false;
-        Object.keys(userLoginData).forEach((val) => {
-            if(!userLoginData[val].length){
+        Object.keys(user).forEach((val) => {
+            if(!user[val].length){
                 errorValue = { ...errorValue, [`${val}Error`]: `Required`};
                 isError = true;
             }
@@ -139,24 +131,52 @@ class SignIn extends React.Component {
             }
         })
         this.setState({ error: errorValue });
-        Object.keys(userLoginData).forEach((val) => {
-            if(userLoginData[val].length) {
-                this.handleValidation(val, userLoginData[val]);
+        Object.keys(user).forEach((val) => {
+            if(user[val].length) {
+                this.handleValidation(val, user[val]);
                 console.log('');
             }
         })
+        console.log('validate', isError);
             return isError;
 
     }
 
+    validateSignIn = () => {
+        const { user, } = this.state;
+        let errorValue = {}; 
+        let isError = false;
+        if(!user['email'].length){
+            errorValue = { ...errorValue, [`emailError`]: 'Required'};
+            isError = true;
+        } else if (!user['password'].length){
+            errorValue = { ...errorValue, [`passwordError`]: 'Required'};
+            isError = true;
+        }
+        this.setState({ error: errorValue });
+        return isError;
+    }
+
     handleLogin = (e) => {
+        const {newAccount} = this.state;
         e.preventDefault();
-        let errorCheck = this.validateLogin();
-        console.log('handle', errorCheck);
-        if(!errorCheck) {
-            this.setState({
-                userLoginData: INIT_LOGIN,
-            })
+        if(!newAccount){
+            let errorCheck = this.validateCreateNewAccount();
+            if(!errorCheck) {
+                console.log('handle', errorCheck);
+                this.setState({
+                    user: USER_DATA,
+                })
+            }
+        }
+        else {
+            let errorCheck = this.validateSignIn();
+            if(!errorCheck) {
+                console.log('sign in', errorCheck);
+                this.setState({
+                    user: USER_DATA,
+                })
+            }
         }
     }
 
@@ -166,9 +186,9 @@ class SignIn extends React.Component {
         const {newAccount, showPassword, error} = this.state;
 
         const newAccountInputs = [
-            {key: 4,name: 'firstName', labelText: 'First Name *', type: 'text', error: 'firstNameError' },
-            {key: 5,name: 'lastName', labelText: 'Surname *', type: 'text', error: 'lastNameError' },
-            {key: 6,name: 'postcode', labelText: 'Postcode *', type: 'number', error: 'postcodeError' },
+            {name: 'firstName', labelText: 'First Name *', type: 'text', error: 'firstNameError' },
+            {name: 'lastName', labelText: 'Surname *', type: 'text', error: 'lastNameError' },
+            {name: 'postcode', labelText: 'Postcode *', type: 'number', error: 'postcodeError' },
         ]
 
         return (
@@ -198,7 +218,6 @@ class SignIn extends React.Component {
                     </div>
                     <div className={style.inputs}>
                             <InputBase
-                                key={1}
                                 labelText={'Email *'}
                                 name={'email'}
                                 type={'text'}
@@ -214,7 +233,6 @@ class SignIn extends React.Component {
                                 }
                             />
                              <InputBase
-                                key={2}
                                 className={style.password}
                                 labelText={'Password *'}
                                 name={'password'}
@@ -222,7 +240,7 @@ class SignIn extends React.Component {
                                 onBlur={this.handleBlur}
                                 onChange={this.handleChange}
                                 onClick={this.passwordVisible}
-                                visibility={showPassword}
+                                visibility={showPassword.toString()}
                                 autoComplete="off"
                                 error={
                                     (error
@@ -233,14 +251,13 @@ class SignIn extends React.Component {
                                 }
                             />
                             {newAccount && <InputBase
-                                key={3}
                                 labelText={'Confirm Password *'}
                                 name={'confirmPassword'}
                                 type={showPassword? 'text' : 'password'}
                                 onBlur={this.handleBlur}
                                 onChange={this.handleChange}
                                 onClick={this.passwordVisible}
-                                visibility={showPassword}
+                                visibility={showPassword.toString()}
                                 autoComplete="off"
                                 error={
                                     (error
@@ -252,7 +269,7 @@ class SignIn extends React.Component {
                             />}
                             {newAccount && newAccountInputs.map((item) => (
                                 <InputBase
-                                key={item.key}
+                                key={item.name}
                                 name={item.name}
                                 labelText={item.labelText}
                                 type={item.type}
