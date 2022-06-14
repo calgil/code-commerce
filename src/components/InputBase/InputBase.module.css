@@ -1,10 +1,13 @@
 
-.inputContainer { position: relative; }
+.inputContainer { 
+    position: relative;
+    margin-bottom: 1rem;
+ }
 
 .eye {
     position: absolute;
     right: 0;
-    top: 28px;
+    top: 33px;
 }
 
 .error { color: red;}

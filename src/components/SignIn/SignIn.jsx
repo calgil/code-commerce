@@ -10,10 +10,14 @@ import {
     postCodeValidation
 } from "./validations";
 
-// const INIT_LOGIN = {
-//     email: '',
-//     password: '',
-// }
+const INIT_LOGIN = {
+    email: '',
+    password: '',
+    confirmPassword: '',
+    firstName: '',
+    lastName: '',
+    postcode: '',
+}
 
 
 class SignIn extends React.Component {
@@ -23,7 +27,7 @@ class SignIn extends React.Component {
             isLoggedIn: false,
             newAccount: false,
             showPassword: false,
-            userLoginData: {},
+            userLoginData: INIT_LOGIN,
             error: {},
         }
     }
@@ -58,13 +62,13 @@ class SignIn extends React.Component {
                         passwordError: errorText
                     }
                 }));
-                if(errorText === undefined){
-                    this.setState({
-                        userLoginData: {
-                            password: value,
-                        }
-                    })
-                }
+                // if(errorText === undefined){
+                //     this.setState({
+                //         userLoginData: {
+                //             password: value,
+                //         }
+                //     })
+                // }
                 break;
             case 'confirmPassword':
                 const {password} = this.state.userLoginData
@@ -138,6 +142,7 @@ class SignIn extends React.Component {
         Object.keys(userLoginData).forEach((val) => {
             if(userLoginData[val].length) {
                 this.handleValidation(val, userLoginData[val]);
+                console.log('');
             }
         })
             return isError;
@@ -147,12 +152,12 @@ class SignIn extends React.Component {
     handleLogin = (e) => {
         e.preventDefault();
         let errorCheck = this.validateLogin();
-        console.log(errorCheck);
-        // if(!errorCheck) {
-        //     this.setState({
-        //         userLoginData: INIT_LOGIN,
-        //     })
-        // }
+        console.log('handle', errorCheck);
+        if(!errorCheck) {
+            this.setState({
+                userLoginData: INIT_LOGIN,
+            })
+        }
     }
 
 
@@ -163,7 +168,7 @@ class SignIn extends React.Component {
         const newAccountInputs = [
             {key: 4,name: 'firstName', labelText: 'First Name *', type: 'text', error: 'firstNameError' },
             {key: 5,name: 'lastName', labelText: 'Surname *', type: 'text', error: 'lastNameError' },
-            {key: 6,name: 'postcode', labelText: 'Postcode *', type: 'number', error: 'postCodeError' },
+            {key: 6,name: 'postcode', labelText: 'Postcode *', type: 'number', error: 'postcodeError' },
         ]
 
         return (
@@ -194,12 +199,13 @@ class SignIn extends React.Component {
                     <div className={style.inputs}>
                             <InputBase
                                 key={1}
-                                labelText={'Your E-Mail Address *'}
+                                labelText={'Email *'}
                                 name={'email'}
-                                type={'email'}
+                                type={'text'}
                                 onBlur={this.handleBlur}
+                                onChange={this.handleChange}
                                 autoComplete="off"
-                                errorM={
+                                error={
                                     (error
                                     && error['emailError']
                                     && error['emailError'].length > 1)
@@ -214,10 +220,11 @@ class SignIn extends React.Component {
                                 name={'password'}
                                 type={showPassword? 'text' : 'password'}
                                 onBlur={this.handleBlur}
+                                onChange={this.handleChange}
                                 onClick={this.passwordVisible}
                                 visibility={showPassword}
                                 autoComplete="off"
-                                errorM={
+                                error={
                                     (error
                                     && error['passwordError']
                                     && error['passwordError'].length > 1)
@@ -228,13 +235,14 @@ class SignIn extends React.Component {
                             {newAccount && <InputBase
                                 key={3}
                                 labelText={'Confirm Password *'}
-                                name={'password'}
+                                name={'confirmPassword'}
                                 type={showPassword? 'text' : 'password'}
                                 onBlur={this.handleBlur}
+                                onChange={this.handleChange}
                                 onClick={this.passwordVisible}
                                 visibility={showPassword}
                                 autoComplete="off"
-                                errorM={
+                                error={
                                     (error
                                     && error['confirmPasswordError']
                                     && error['confirmPasswordError'].length > 1)
@@ -251,7 +259,7 @@ class SignIn extends React.Component {
                                 onBlur={this.handleBlur}
                                 onChange={this.handleChange}
                                 autoComplete="off"
-                                errorM={
+                                error={
                                     (error
                                     && error[item.error]
                                     && error[item.error].length > 1)

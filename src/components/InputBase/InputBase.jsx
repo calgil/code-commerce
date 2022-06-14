@@ -17,7 +17,7 @@ const InputBase = ({ labelText, ...props}) => (
                         icon={props.visibility ? faEye : faEyeSlash }
                         onClick={props.passwordVisible} 
                     />}
-                    {props.errorM && <div className={s.error}>{props.errorM}</div>}
+                    {props.error && <div className={s.error}>{props.error}</div>}
             </label>
        </div>
 )

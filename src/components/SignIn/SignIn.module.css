@@ -1,7 +1,7 @@
 .signIn {
-    max-width: 500px;
+    max-width: 400px;
     margin: 0 auto;
-    background-color: #FFFFFFE5;
+    background-color: #fff;
     color: #333;
     border-radius: 5px;
     padding-top: 1rem;
@@ -24,19 +24,20 @@ form { padding: 0 20px; }
 .radioContainer input { margin-right: 0.75rem; }
 
 .inputs input, 
-.btn-wrapper input {
+.btnWrapper input {
     display: block;
     width: 100%;
     padding: 0.35rem;
     margin-top: 0.25rem;
-    margin-bottom: 1rem;
     font-size: 1rem;
     border-radius: 5px;
-    border: none;
+    border: 1px solid #333;
+    line-height: 1.6;
 }
 
 .inputs input:focus {
     outline: none;
+    background-color: #e7f0ff;
 }
 
 input[type=number]::-webkit-outer-spin-button,
@@ -52,22 +53,17 @@ input[type=number] {
 .btnWrapper {
     margin-top: 1rem;
     text-align: center;
-    /* width: 80%;
-    margin-left: auto;
-    margin-right: auto; */
 }
 
 input[type="submit"] {
-    background: #e43c2a;
-    border: 1px solid #e43c2a;
-    border-radius: 10px;
+    background: #000;
+    border: 1px solid #000;
+    border-radius: 100px;
     color: white;
-    font-size: 20px;
     font-weight: bold;
     cursor: pointer;
     margin-top: 0.5rem;
-    min-width: 200px;
-    /* width: 100%; */
+    width: 100%;
 }
 
 .password {
