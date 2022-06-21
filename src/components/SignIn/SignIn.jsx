@@ -8,7 +8,7 @@ import {
     confirmPasswordValidation, 
     onlyTextValidation,
     postCodeValidation
-} from "./validations";
+} from "../../utilities/validations";
 
 const USER_DATA = {
     email: '',
@@ -16,7 +16,7 @@ const USER_DATA = {
     confirmPassword: '',
     firstName: '',
     lastName: '',
-    postcode: '',
+    postCode: '',
     isLoggedIn: false,
 }
 
@@ -26,20 +26,16 @@ class SignIn extends React.Component {
         super(props);
         this.state = {
             newAccount: false,
-            showPassword: false,
+            isLoggedIn: false,
+            userLogin: '',
             user: USER_DATA,
             error: {},
         }
     }
 
-    // This is the way to alternate between two states
     handleRadioChange = () => {
         this.setState({ newAccount: !this.state.newAccount })
     };
-
-    passwordVisible = () => {
-        this.setState({ showPassword: !this.state.showPassword })
-    }
 
     handleValidation = (type, value) => {
         let errorText;
@@ -63,7 +59,7 @@ class SignIn extends React.Component {
                 }));
                 break;
             case 'confirmPassword':
-                const {password} = this.state.userLoginData
+                const {password} = this.state.user
                 errorText = confirmPasswordValidation(value, password);
                 this.setState((prevState) => ({
                     error: {
@@ -90,7 +86,7 @@ class SignIn extends React.Component {
                     }
                 }))
                 break;
-            case 'postcode':
+            case 'postCode':
                 errorText = postCodeValidation(value);
                 this.setState((prevState) => ({
                     error: {
@@ -108,74 +104,82 @@ class SignIn extends React.Component {
 
     handleChange= ({ target: { name, value }}) => {
         this.setState((prevState) => ({
-            userLoginData: {
-                ...prevState.userLoginData,
+            user: {
+                ...prevState.user,
                 [name]: value,
             }
         }))
     }
 
-    validateCreateNewAccount = () => {
-        const { user, error } = this.state;
-        let errorValue = {}; 
+    checkLoginError = () => {
+        const { user, error, } = this.state;
+        let errorValue = {};
         let isError = false;
         Object.keys(user).forEach((val) => {
-            if(!user[val].length){
-                errorValue = { ...errorValue, [`${val}Error`]: `Required`};
+            if(((val === 'email') || (val === 'password')) && !user[`${val}`].length) {
+                errorValue = {...errorValue, [`${val}Error`]: "Required"}
                 isError = true;
             }
-        });
+        })
+        this.setState({ error: errorValue });
         Object.keys(error).forEach((val) => {
             if(error[val]){
                 isError = true;
             }
         })
-        this.setState({ error: errorValue });
         Object.keys(user).forEach((val) => {
-            if(user[val].length) {
+            if(((val === 'email') || (val === 'password')) && user[`${val}`].length) {
                 this.handleValidation(val, user[val]);
-                console.log('');
             }
         })
-        console.log('validate', isError);
-            return isError;
-
+        return isError;
     }
 
-    validateSignIn = () => {
-        const { user, } = this.state;
-        let errorValue = {}; 
+    checkErrorBeforeSave = () => {
+        const { user, error, } = this.state;
+        let errorValue = {};
         let isError = false;
-        if(!user['email'].length){
-            errorValue = { ...errorValue, [`emailError`]: 'Required'};
-            isError = true;
-        } else if (!user['password'].length){
-            errorValue = { ...errorValue, [`passwordError`]: 'Required'};
-            isError = true;
-        }
+      
+        Object.keys(user).forEach((val) => {
+            if(!user[val].length) {
+                errorValue = {...errorValue, [`${val}Error`]: "Required"}
+                isError = true;
+            }
+        })
         this.setState({ error: errorValue });
+        Object.keys(error).forEach((val) => {
+            if(error[val]){
+                isError = true;
+            }
+        })
+        Object.keys(user).forEach((val) => {
+            if(user[`${val}`].length) {
+                this.handleValidation(val, user[val]);
+            }
+        })
         return isError;
     }
 
     handleLogin = (e) => {
-        const {newAccount} = this.state;
         e.preventDefault();
-        if(!newAccount){
-            let errorCheck = this.validateCreateNewAccount();
-            if(!errorCheck) {
-                console.log('handle', errorCheck);
+        const { newAccount } = this.state;
+        if (!newAccount) {
+            let checkError = this.checkLoginError();
+            if (!checkError) {
                 this.setState({
                     user: USER_DATA,
+                    isLoggedIn: true,
                 })
+                this.props.changeLoginStatus();
             }
-        }
-        else {
-            let errorCheck = this.validateSignIn();
-            if(!errorCheck) {
-                console.log('sign in', errorCheck);
+        } else {
+            let checkError = this.checkErrorBeforeSave();
+            if (!checkError) {
                 this.setState({
                     user: USER_DATA,
+                    isLoggedIn: true,
                 })
+                this.props.changeLoginStatus();
             }
         }
     }
@@ -183,121 +187,126 @@ class SignIn extends React.Component {
 
 
     render() {
-        const {newAccount, showPassword, error} = this.state;
+        const {newAccount, error, user} = this.state;
 
         const newAccountInputs = [
             {name: 'firstName', labelText: 'First Name *', type: 'text', error: 'firstNameError' },
             {name: 'lastName', labelText: 'Surname *', type: 'text', error: 'lastNameError' },
-            {name: 'postcode', labelText: 'Postcode *', type: 'number', error: 'postcodeError' },
+            {name: 'postCode', labelText: 'Postcode *', type: 'number', error: 'postCodeError' },
         ]
 
         return (
-                <form 
+                <div 
+                    className={style.signInBg}
+                >
+                    <form 
                     onSubmit={this.handleLogin}
                     className={style.signIn}
-                >
-                    <div className={style.radioContainer}>
-                        {/* I feel like this should be built better? Map through data? */}
-                            <RadioBase 
-                                name='account'
-                                labelText='Sign In'
-                                type='radio'
-                                value='Sign In' 
-                                onChange={this.handleRadioChange}
-                                checked={!newAccount} 
-                            />
-                            <RadioBase 
-                                name='account'
-                                labelText='Create Account'
-                                type='radio'
-                                value='Create Account'
-                                onChange={this.handleRadioChange}
-                                checked={newAccount}
-                            />
-                            
-                    </div>
-                    <div className={style.inputs}>
-                            <InputBase
-                                labelText={'Email *'}
-                                name={'email'}
-                                type={'text'}
-                                onBlur={this.handleBlur}
-                                onChange={this.handleChange}
-                                autoComplete="off"
-                                error={
-                                    (error
-                                    && error['emailError']
-                                    && error['emailError'].length > 1)
-                                    ? error['emailError']
-                                    : null
-                                }
-                            />
-                             <InputBase
-                                className={style.password}
-                                labelText={'Password *'}
-                                name={'password'}
-                                type={showPassword? 'text' : 'password'}
-                                onBlur={this.handleBlur}
-                                onChange={this.handleChange}
-                                onClick={this.passwordVisible}
-                                visibility={showPassword.toString()}
-                                autoComplete="off"
-                                error={
-                                    (error
-                                    && error['passwordError']
-                                    && error['passwordError'].length > 1)
-                                    ? error['passwordError']
-                                    : null
-                                }
-                            />
-                            {newAccount && <InputBase
-                                labelText={'Confirm Password *'}
-                                name={'confirmPassword'}
-                                type={showPassword? 'text' : 'password'}
-                                onBlur={this.handleBlur}
-                                onChange={this.handleChange}
-                                onClick={this.passwordVisible}
-                                visibility={showPassword.toString()}
-                                autoComplete="off"
-                                error={
-                                    (error
-                                    && error['confirmPasswordError']
-                                    && error['confirmPasswordError'].length > 1)
-                                    ? error['confirmPasswordError']
-                                    : null
-                                }
-                            />}
-                            {newAccount && newAccountInputs.map((item) => (
-                                <InputBase
-                                key={item.name}
-                                name={item.name}
-                                labelText={item.labelText}
-                                type={item.type}
-                                onBlur={this.handleBlur}
-                                onChange={this.handleChange}
-                                autoComplete="off"
-                                error={
-                                    (error
-                                    && error[item.error]
-                                    && error[item.error].length > 1)
-                                    ? error[item.error]
-                                    : null
-                                }
+                    >
+                        <div className={style.radioContainer}>
+                                <RadioBase 
+                                    name='account'
+                                    labelText='Sign In'
+                                    type='radio'
+                                    value='Sign In' 
+                                    onChange={this.handleRadioChange}
+                                    checked={!newAccount} 
                                 />
-                            ))}
-                    </div>
-                    <div className={style.btnWrapper}>
-                        <InputBase type='submit' value={newAccount ?'SAVE' : 'LOGIN'} />
-                        <div className={style.line}><hr className={style.rule} /> <span>or</span> <hr className={style.rule} /></div>
-                        <InputBase className={style.facebook} type='submit' value={newAccount ?'SIGN UP WITH FACEBOOK' : 'SIGN IN WITH FACEBOOK'} />
-                        <span className={style.cancel}>Cancel</span>
-                        <div className={style.tos}>
-                            <a href="www">Privacy Policy and Cookies</a>
-                            <span>|</span>
-                            <a href="www">Terms of Sale and Use</a>
+                                <RadioBase 
+                                    name='account'
+                                    labelText='Create Account'
+                                    type='radio'
+                                    value='Create Account'
+                                    onChange={this.handleRadioChange}
+                                    checked={newAccount}
+                                />
+                                
                         </div>
-                    </div>
+                        <div className={style.inputs}>
+                                <InputBase
+                                    labelText={'Email *'}
+                                    name={'email'}
+                                    type={'text'}
+                                    value={user && user['email']}
+                                    onBlur={this.handleBlur}
+                                    onChange={this.handleChange}
+                                    autoComplete="off"
+                                    error={
+                                        (error
+                                        && error['emailError']
+                                        && error['emailError'].length > 1)
+                                        ? error['emailError']
+                                        : null
+                                    }
+                                />
+                                 <InputBase
+                                    className={style.password}
+                                    labelText={'Password *'}
+                                    name={'password'}
+                                    type={'password'}
+                                    value={user && user['password']}
+                                    onBlur={this.handleBlur}
+                                    onChange={this.handleChange}
+                                    autoComplete="off"
+                                    error={
+                                        (error
+                                        && error['passwordError']
+                                        && error['passwordError'].length > 1)
+                                        ? error['passwordError']
+                                        : null
+                                    }
+                                />
+                                {newAccount && <InputBase
+                                    className={style.password}
+                                    labelText={'Confirm Password *'}
+                                    name={'confirmPassword'}
+                                    type={ 'password'}
+                                    value={user && user['confirmPassword']}
+                                    onBlur={this.handleBlur}
+                                    onChange={this.handleChange}
+                                    autoComplete="off"
+                                    error={
+                                        (error
+                                        && error['confirmPasswordError']
+                                        && error['confirmPasswordError'].length > 1)
+                                        ? error['confirmPasswordError']
+                                        : null
+                                    }
+                                />}
+                                {newAccount && newAccountInputs.map((item) => (
+                                    <InputBase
+                                    key={item.name}
+                                    name={item.name}
+                                    labelText={item.labelText}
+                                    type={item.type}
+                                    value={user && user[item.name]}
+                                    onBlur={this.handleBlur}
+                                    onChange={this.handleChange}
+                                    autoComplete="off"
+                                    error={
+                                        (error
+                                        && error[item.error]
+                                        && error[item.error].length > 1)
+                                        ? error[item.error]
+                                        : null
+                                    }
+                                    />
+                                ))}
+                                
+                        </div>
+                        <div className={style.btnWrapper}>
+                            <InputBase type='submit' value={newAccount ?'SAVE' : 'LOGIN'} />
+                            <div className={style.line}><hr className={style.rule} /> <span>or</span> <hr className={style.rule} /></div>
+                            <InputBase className={style.facebook} type='submit' value={newAccount ?'SIGN UP WITH FACEBOOK' : 'SIGN IN WITH FACEBOOK'} />
+                            <input onClick={this.props.signInVisibility} className={style.cancel} type="button" value={'Cancel'} />
+                            <div className={style.tos}>
+                                <a href="www">Privacy Policy and Cookies</a>
+                                <span>|</span>
+                                <a href="www">Terms of Sale and Use</a>
+                            </div>
+                        </div>
                 </form>
+            </div>
         )
     }
 }

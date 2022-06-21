@@ -16,7 +16,7 @@ export const passwordValidation = (value) => {
         if(passwordRegEx.test(value) && value.length > 8 && value.length < 20){
             return undefined
         } else {
-            return 'Password must meet criteria'
+            return 'Password must be 8-20 characters, including: at least 1 capital letter, at least one lower case letter, one number, and one special character -!@#$%^&*()_+'
         }
     }
 }

@@ -10,4 +10,7 @@
     top: 33px;
 }
 
-.error { color: red;}
+.error { 
+    padding-top: 0.5rem;
+    color: red;
+}

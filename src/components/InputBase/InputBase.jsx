@@ -4,22 +4,40 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
-const InputBase = ({ labelText, ...props}) => (
-       <div className={s.inputContainer}>
-             <label className={props.className}>
+class InputBase extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            showPassword: false,
+        }
+    }
+
+    passwordVisible = () => {
+        this.setState({ showPassword: !this.state.showPassword })
+    }
+
+    render() {
+        const {labelText, className, error, type, ...props} = this.props;
+        const { showPassword } = this.state;
+        return (
+            <div className={s.inputContainer}>
+             <label className={className}>
             {labelText}
-                <input type={props.type} {...props} />
+                <input type={(type === 'password' && showPassword) ? 'text' : type} {...props} />
                     {(labelText === 'Password *' ||  
                     labelText === 'Confirm Password *')
+
                     &&
                     <FontAwesomeIcon 
                         className={s.eye} 
-                        icon={props.visibility === 'true' ? faEye : faEyeSlash }
-                        onClick={props.passwordVisible} 
+                        icon={showPassword  ? faEye : faEyeSlash }
+                        onClick={this.passwordVisible} 
                     />}
-                    {props.error && <div className={s.error}>{props.error}</div>}
+                    {error && <div className={s.error}>{error}</div>}
             </label>
        </div>
-)
+        )
+    }
+}
 
-export default InputBase
+export default InputBase;
