@@ -32,10 +32,10 @@ class DisplayShop extends React.Component {
                 <div className={s.shopContainer}>
                 {items.map((item) => (
                     <ShopItem 
-                    key={item.name}
-                    name={item.name}
-                    img={item.image}
-                    price={item.price}
+                        key={item.name}
+                        name={item.name}
+                        img={item.image}
+                        price={item.price}
                     // addItemToCart={this.addToCart}
                     />
                 ))}

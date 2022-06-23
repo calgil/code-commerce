@@ -1,5 +1,5 @@
 import React from "react";
-import style from './SignIn.module.css';
+import style  from './SignIn.module.css';
 import RadioBase from "../RadioBase/RadioBase";
 import InputBase from "../InputBase/InputBase";
 import { 
@@ -102,7 +102,7 @@ class SignIn extends React.Component {
 
     handleBlur = ( { target: { name, value }} ) => { this.handleValidation(name, value) }
 
-    handleChange= ({ target: { name, value }}) => {
+    handleChange = ({ target: { name, value }}) => {
         this.setState((prevState) => ({
             user: {
                 ...prevState.user,

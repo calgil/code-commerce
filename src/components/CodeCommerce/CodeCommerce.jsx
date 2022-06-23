@@ -1,8 +1,8 @@
 import React from "react";
 import s from './CodeCommerce.module.css'
 import SignIn from "../SignIn/SignIn";
-import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
 import DisplayShop from "../DisplayShop/DisplayShop";
 import Cart from "../Cart/Cart";
 
@@ -12,6 +12,7 @@ class CodeCommerce extends React.Component {
         this.state = {
             loggedIn: false,
             showSignIn: false, 
+            showCart: false,
         }
     }
 
@@ -27,8 +28,14 @@ class CodeCommerce extends React.Component {
         });
     };
 
+    handleCartClick = () => {
+        this.setState({
+            showCart: !this.state.showCart,
+        });
+    }
+
     render(){
-        const {loggedIn, showSignIn, } = this.state;
+        const { showSignIn, showCart} = this.state;
         return (
             <div className={s.main}>
                 <div className={s.hero}>
@@ -44,17 +51,20 @@ class CodeCommerce extends React.Component {
                              <FontAwesomeIcon
                                 className={s.cart}
                                 icon={faCartShopping}
+                                onClick={this.handleCartClick}
                             />
                         </div>
                     </header>
                 </div>
-                {(showSignIn || loggedIn) && 
+                {(showSignIn) && 
                 <SignIn 
                     changeLoginStatus={this.updateLogin}
                     signInVisibility={this.toggleShowSignIn}
                 /> }
                 <DisplayShop />
-                <Cart />
+                { showCart && 
+                    <Cart
+                        cartVisibility={this.handleCartClick} /> }
             </div>
         )
     }
