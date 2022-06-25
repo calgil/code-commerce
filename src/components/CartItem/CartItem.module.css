@@ -24,12 +24,12 @@ img { border-radius: 10px; }
 
 .qtySelect {
     width: 50px;
-    background-color: #ffe;
+    background-color: #fff;
     border-radius: 5px;
 }
 
 .qtySelect:focus, .qtySelect:hover, .qtySelect:active {
-    background-color: #eee;
+    background-color: #ffe;
     border: none;
     outline: none;
 }
