@@ -1,29 +1,3 @@
-.cartBg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.3);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #fff;
-    z-index: 20;
-}
-
-.close {
-    width: 50px;
-    margin-left: auto;
-    cursor: pointer;
-    font-size: 20px;
-    color: #333;
-    position: fixed;
-    top: 30px;
-    left: 0;
-    right: 30px;
-}
-
 .cartBody {
     flex: 2;
     padding: 0 40px;
@@ -51,3 +25,8 @@
 
 .info { display: inline-block; }
 
+@media only screen and (max-width: 900px) {
+    .cartBody {
+        width: 100%;
+    }
+}

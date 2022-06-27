@@ -4,6 +4,10 @@
     margin-bottom: 1rem;
  }
 
+ .input {
+    display: block;
+ }
+
 .eye {
     position: absolute;
     right: 0;

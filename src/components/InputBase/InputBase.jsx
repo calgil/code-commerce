@@ -23,7 +23,7 @@ class InputBase extends React.Component {
             <div className={s.inputContainer}>
              <label className={className}>
             {labelText}
-                <input type={(type === 'password' && showPassword) ? 'text' : type} {...props} />
+                <input className={s.input} type={(type === 'password' && showPassword) ? 'text' : type} {...props} />
                     {(labelText === 'Password *' ||  
                     labelText === 'Confirm Password *')
 

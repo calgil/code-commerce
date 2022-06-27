@@ -10,12 +10,12 @@ class CartItem extends React.Component {
     }
 
     handleQuantityChange = ({ target: { name, value }}) => {
-        this.props.updateItemQuantity(name, +value);
+        this.props.newQuantity(name, +value);
     }
 
     removeItem = () => {
         const { name } = this.props
-        this.props.updateItemQuantity(name, 0)
+        this.props.newQuantity(name, 0);
     }
 
     render() {
@@ -25,6 +25,7 @@ class CartItem extends React.Component {
             <div>
                 { (quantity > 0) && 
                 <div className={s.cartItem}>
+                    <hr />
                     <div className={s.product}>
                         <h4 className={s.itemName}>{name}</h4>
                         <div className={s.imgContainer}>

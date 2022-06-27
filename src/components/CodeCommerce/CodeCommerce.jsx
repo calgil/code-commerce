@@ -4,7 +4,7 @@ import SignIn from "../SignIn/SignIn";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
 import DisplayShop from "../DisplayShop/DisplayShop";
-import Cart from "../Cart/Cart";
+import Checkout from "../Checkout/Checkout";
 
 class CodeCommerce extends React.Component {
     constructor() {
@@ -12,7 +12,7 @@ class CodeCommerce extends React.Component {
         this.state = {
             loggedIn: false,
             showSignIn: false, 
-            showCart: false,
+            showCheckout: false,
         }
     }
 
@@ -30,12 +30,12 @@ class CodeCommerce extends React.Component {
 
     handleCartClick = () => {
         this.setState({
-            showCart: !this.state.showCart,
+            showCheckout: !this.state.showCheckout,
         });
     }
 
     render(){
-        const { showSignIn, showCart} = this.state;
+        const { showSignIn, showCheckout} = this.state;
         return (
             <div className={s.main}>
                 <div className={s.hero}>
@@ -62,9 +62,10 @@ class CodeCommerce extends React.Component {
                     signInVisibility={this.toggleShowSignIn}
                 /> }
                 <DisplayShop />
-                { showCart && 
-                    <Cart
-                        cartVisibility={this.handleCartClick} /> }
+                { showCheckout && 
+                    <Checkout
+                        checkoutVisibility={this.handleCartClick} 
+                    /> }
             </div>
         )
     }
