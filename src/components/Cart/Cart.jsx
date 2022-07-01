@@ -16,7 +16,6 @@ const Cart = (props) => {
                         <span>Total Price</span>
                     </div>
                 </div>
-                <hr />
                 {shoppingCartItems.map((item) => (
                     <CartItem 
                         key={item.name}

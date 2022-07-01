@@ -11,11 +11,14 @@ class Shipping extends React.Component {
     }
     render() {
 
-        // style shipping inputs
-        // populate data for remaining shipping inputs
-
         const shippingInputs = [
-            {name: 'firstName', labelText: 'First Name *', type: 'text', error: 'firstNameError' },
+            {name: 'addressTitle', labelText: 'Address Title *', type: 'text', error: 'addressTitleError' },
+            {name: 'name', labelText: 'Name - Surname *', type: 'text', error: 'nameError' },
+            {name: 'address', labelText: 'Address *', type: 'text', error: 'addressError' },
+            {name: 'phone', labelText: 'Phone *', type: 'number', error: 'phoneError' },
+            {name: 'postcode', labelText: 'Zip *', type: 'number', error: 'postcodeError' },
+            {name: 'city', labelText: 'City *', type: 'text', error: 'cityError' },
+            {name: 'state', labelText: 'State/Providence *', type: 'text', error: 'stateError' },
         ]
 
         return (
@@ -23,12 +26,13 @@ class Shipping extends React.Component {
                 <h3>Shipping</h3>
                 {shippingInputs.map((item) => (
                     <InputBase 
-                        key={item.key}
+                        key={item.name}
                         name={item.name}
                         labelText={item.labelText}
                         type={item.type}
                     />
                 ))}
+                {/* Might have to make a custom select for country */}
             </div>
         )
     }

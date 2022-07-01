@@ -13,6 +13,8 @@ class DisplayShop extends React.Component {
 
     // Maybe try this later
     // addToCart = () => {
+        // find item in array of items. pass that to codeCommerce
+        // code commerce can then pass that data to checkout/cart
     //     this.setState((prevState) => ({
     //         cart: {
     //             ...prevState.cart,

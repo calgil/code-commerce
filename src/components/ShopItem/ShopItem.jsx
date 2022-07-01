@@ -8,6 +8,7 @@ const ShopItem = ({ name, img, price, ...props }) => (
         </div>
         <h4 className={s.itemName}>{name}</h4>
         <span className={s.price}>{price}</span>
+        {/* Make add to cart button */}
     </div>
 )
 

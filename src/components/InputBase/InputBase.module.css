@@ -12,6 +12,7 @@
     position: absolute;
     right: 0;
     top: 33px;
+    margin-right: 10px;
 }
 
 .error { 

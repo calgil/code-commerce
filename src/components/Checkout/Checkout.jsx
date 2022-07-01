@@ -7,18 +7,23 @@ import OrderSummary from "../OrderSummary/OrderSummary";
 import shirt from '../../assets/shirt.jpeg';
 import backpack from '../../assets/backpack.jpeg';
 import Shipping from "../Shipping/Shipping";
+import Payment from "../Payment/Payment";
 
 class Checkout extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            showCart: false,
-            showShipping: true,
+            checkoutStatus: {
+                showCart: true, 
+                showShipping: false, 
+                showPayment: false,
+                showConfirmation: false,
+            },
             subtotal: 0,
             userShoppingCart: [
                 { name: 'T-Shirt', quantity: 1, image: shirt, price: 19.99, },
                 { name: 'Backpack', quantity: 1, image: backpack, price: 49.99, },
-            ]
+            ],
         }
     }
 
@@ -42,17 +47,42 @@ class Checkout extends React.Component {
                 : item
             ))
         }), this.calcSubtotal);
-        
     }
-
-    
 
     componentDidMount() {
         this.calcSubtotal();
     }
 
+    updateSubState = (name, sub, state) => {
+        this.setState((prevState) => ({
+            [name]: {
+                ...prevState[name],
+                [sub]: state,
+            }
+        }))
+    }
+
+    handleCheckoutClick = () => {
+        const { checkoutStatus } = this.state;
+        for (const [key, value] of Object.entries(checkoutStatus)) {
+            if (value && key === 'showCart'){
+                this.updateSubState('checkoutStatus', key, false)
+                this.updateSubState('checkoutStatus', 'showShipping', true);
+            }
+            else if (value && key === 'showShipping') {
+                this.updateSubState('checkoutStatus', 'showShipping', false)
+                this.updateSubState('checkoutStatus', 'showPayment', true);
+            }
+            else if (value && key === 'showPayment'){
+                this.updateSubState('checkoutStatus', 'showPayment', false)
+                this.updateSubState('checkoutStatus', 'showConfirmation', true);
+            }
+          }
+    }
+
     render(){
-        const { userShoppingCart, showCart, showShipping, subtotal } = this.state
+        const { userShoppingCart, subtotal, checkoutStatus } = this.state;
+        const { showCart, showShipping, showPayment, showConfirmation } = checkoutStatus;
         return (
             <div className={s.checkoutBg}>
                 <div className={s.close}>
@@ -61,22 +91,31 @@ class Checkout extends React.Component {
                             onClick={this.props.checkoutVisibility}
                         />
                 </div>
-                {/* build this thing. It should be pretty fun */}
-                {/* Will implement progress bar here */}
-
-                {/* eventually I want a message to appear if all items have been removed from cart */}
-                {  (showCart) && 
-                <Cart 
-                    shoppingCartItems={userShoppingCart}
-                    updateItemQuantity={this.updateQuantity}
-                />}
-                { (showShipping) && 
-                <Shipping />
-                }
-
-                <OrderSummary
-                    cartSubtotal={subtotal}
-                 />
+               <div className={s.checkoutBody}>
+                        {/* build this thing. It should be pretty fun */}
+                        {/* Will implement progress bar here */}
+                        {/* eventually I want a message to appear if all items have been removed from cart */}
+                    {  ( showCart ) &&
+                    <Cart 
+                        shoppingCartItems={userShoppingCart}
+                        updateItemQuantity={this.updateQuantity}
+                    />}
+                    { ( showShipping ) && 
+                    <Shipping />
+                    }
+                    { ( showPayment ) && 
+                    <Payment />
+                    }
+                    { ( showConfirmation ) &&
+                        <h3>Confirmation</h3>
+                    }
+                    {/* Pass something in as props to update state of checkout process */}
+                    <OrderSummary
+                        cartSubtotal={subtotal}
+                        status={checkoutStatus}
+                        handleCheckoutClick={this.handleCheckoutClick}
+                     />
+               </div>
             </div>
         )
     }

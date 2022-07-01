@@ -6,7 +6,6 @@ class OrderSummary extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            // subtotal: props.cartSubtotal,
             shippingCost: 0,
             cartTotal: '',
         }
@@ -38,6 +37,7 @@ class OrderSummary extends React.Component {
                 <InputBase 
                     type="submit"
                     value='Checkout'
+                    onClick={this.props.handleCheckoutClick}
                 />
             </div>
         )

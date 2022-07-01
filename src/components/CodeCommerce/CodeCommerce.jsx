@@ -39,6 +39,7 @@ class CodeCommerce extends React.Component {
         return (
             <div className={s.main}>
                 <div className={s.hero}>
+                    {/* This navbar could be a component and re-used in checkout */}
                     <header className={s.header}>
                         <h1 className={s.gear}><a href="./">Gear Shop</a></h1>
                         <div className={s.links}>

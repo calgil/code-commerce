@@ -1,5 +1,5 @@
 .cartBody {
-    flex: 2;
+    width: 100%;
     padding: 0 40px;
     color: #333;
     margin: 20px;
@@ -7,7 +7,10 @@
     border-radius: 10px;
 }
 
-.title { text-align: left; }
+.title { 
+    text-align: left;
+    margin-left: 10px;
+ }
 
 .cartHeader {
     display: flex;

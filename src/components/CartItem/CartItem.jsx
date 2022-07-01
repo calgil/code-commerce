@@ -24,8 +24,9 @@ class CartItem extends React.Component {
             
             <div>
                 { (quantity > 0) && 
-                <div className={s.cartItem}>
-                    <hr />
+                <div className={s.cartItemContainer}>
+                    <div className={s.line}></div>
+                    <div className={s.cartItem}>
                     <div className={s.product}>
                         <h4 className={s.itemName}>{name}</h4>
                         <div className={s.imgContainer}>
@@ -60,6 +61,7 @@ class CartItem extends React.Component {
                         <div className={s.totalPriceContainer}>
                             <span className={s.price}>${(quantity * price).toFixed(2)}</span>
                         </div>
+                    </div>
                     </div>
                 </div>
                 }

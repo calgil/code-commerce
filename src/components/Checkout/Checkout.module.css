@@ -4,11 +4,11 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.3);
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: #fff;
+    overflow-y: scroll;
     z-index: 20;
 }
 
@@ -24,8 +24,19 @@
     right: 30px;
 }
 
+.checkoutBody {
+    width: 100%;
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+}
+
 @media only screen and (max-width: 900px) {
-    .checkoutBg {
+    .checkoutBody {
         flex-direction: column;
+        padding: 40px;
+        margin-top: 12rem;
+        justify-content: center;
+        align-items: center;
     }
 }
