@@ -1,0 +1,39 @@
+.status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    color: #333;
+    margin: 20px 0;
+    border: 1px solid #333;
+    border-radius: 20px;
+}
+
+.status div {
+    padding: 10px 60px;
+}
+
+.status div.active {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 100px;
+    border-radius: 20px;
+}
+
+@media only screen and (max-width: 900px) {
+    .status {
+        max-width: 300px;
+        margin: 10px auto;
+    }
+
+    .status div {
+        display: none;
+    }
+
+    .status div.active {
+        display: block;
+        width: 100%;
+        z-index: 50;
+        text-align: center;
+    }
+}

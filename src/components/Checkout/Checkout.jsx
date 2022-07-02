@@ -8,6 +8,7 @@ import shirt from '../../assets/shirt.jpeg';
 import backpack from '../../assets/backpack.jpeg';
 import Shipping from "../Shipping/Shipping";
 import Payment from "../Payment/Payment";
+import CheckoutStatus from "../CheckoutStatus/CheckoutStatus";
 
 class Checkout extends React.Component {
     constructor(props){
@@ -91,31 +92,36 @@ class Checkout extends React.Component {
                             onClick={this.props.checkoutVisibility}
                         />
                 </div>
-               <div className={s.checkoutBody}>
-                        {/* build this thing. It should be pretty fun */}
-                        {/* Will implement progress bar here */}
-                        {/* eventually I want a message to appear if all items have been removed from cart */}
-                    {  ( showCart ) &&
-                    <Cart 
-                        shoppingCartItems={userShoppingCart}
-                        updateItemQuantity={this.updateQuantity}
-                    />}
-                    { ( showShipping ) && 
-                    <Shipping />
-                    }
-                    { ( showPayment ) && 
-                    <Payment />
-                    }
-                    { ( showConfirmation ) &&
-                        <h3>Confirmation</h3>
-                    }
-                    {/* Pass something in as props to update state of checkout process */}
-                    <OrderSummary
-                        cartSubtotal={subtotal}
-                        status={checkoutStatus}
-                        handleCheckoutClick={this.handleCheckoutClick}
+                <div>
+                     <CheckoutStatus
+                         checkoutStatus={checkoutStatus}
                      />
-               </div>
+                    <div className={s.checkoutBody}>
+                             {/* build this thing. It should be pretty fun */}
+                             {/* Will implement progress bar here */}
+                             {/* eventually I want a message to appear if all items have been removed from cart */}
+                         {  ( showCart ) &&
+                         <Cart 
+                             shoppingCartItems={userShoppingCart}
+                             updateItemQuantity={this.updateQuantity}
+                         />}
+                         { ( showShipping ) && 
+                         <Shipping />
+                         }
+                         { ( showPayment ) && 
+                         <Payment />
+                         }
+                         { ( showConfirmation ) &&
+                             <h3>Confirmation</h3>
+                         }
+                         {/* Pass something in as props to update state of checkout process */}
+                         <OrderSummary
+                             cartSubtotal={subtotal}
+                             status={checkoutStatus}
+                             handleCheckoutClick={this.handleCheckoutClick}
+                          />
+                    </div>
+                </div>
             </div>
         )
     }

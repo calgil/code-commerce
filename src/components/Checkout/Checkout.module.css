@@ -4,21 +4,19 @@
     left: 0;
     right: 0;
     bottom: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     background-color: #fff;
     overflow-y: scroll;
     z-index: 20;
+    padding: 0 15px;
 }
 
 .close {
     width: 50px;
     margin-left: auto;
+    margin-top: 50px;
     cursor: pointer;
     font-size: 20px;
     color: #333;
-    position: fixed;
     top: 30px;
     left: 0;
     right: 30px;
@@ -28,14 +26,14 @@
     width: 100%;
     display: flex;
     gap: 20px;
-    padding: 20px;
 }
+
+h3 { color: #333;}
 
 @media only screen and (max-width: 900px) {
     .checkoutBody {
         flex-direction: column;
         padding: 40px;
-        margin-top: 12rem;
         justify-content: center;
         align-items: center;
     }
