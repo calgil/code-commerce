@@ -14,21 +14,47 @@
 .cartHeader {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin-bottom: 1rem;
 }
 
 .cartHeader span {
-    display: inline-block;
+    /* display: inline-block; */
     width: 100px;
     text-align: center;
 }
 
 .product { margin-left: 2rem; }
 
-.info { display: inline-block; }
+.info {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+}
 
 @media only screen and (max-width: 900px) {
     .cartBody {
         width: 100%;
+    }
+
+    .product { 
+        margin: 0;
+        max-width: 100px;
+    }
+
+    .cartHeader span {
+        width: 50px;
+        margin: 0 20px;
+    }
+}
+
+@media only screen and (max-width: 560px) {
+    .info .price {
+        display: none;
+    }
+
+    .cartHeader span {
+        width: 50px;
+        margin: 0 8px;
     }
 }

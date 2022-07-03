@@ -2,7 +2,7 @@ import React from "react";
 import s from './Cart.module.css';
 import CartItem from "../CartItem/CartItem";
 
-const Cart = (props) => {
+const Cart = ({...props}) => {
     const { shoppingCartItems } = props;
 
     return (
@@ -11,7 +11,7 @@ const Cart = (props) => {
                 <div className={s.cartHeader}>
                     <span className={s.product}>Product</span>
                     <div className={s.info}>
-                        <span>Price</span>
+                        <span className={s.price}>Price</span>
                         <span>Quantity</span>
                         <span>Total Price</span>
                     </div>

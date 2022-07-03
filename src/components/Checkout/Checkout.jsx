@@ -64,21 +64,22 @@ class Checkout extends React.Component {
     }
 
     handleCheckoutClick = () => {
-        const { checkoutStatus } = this.state;
-        for (const [key, value] of Object.entries(checkoutStatus)) {
-            if (value && key === 'showCart'){
-                this.updateSubState('checkoutStatus', key, false)
-                this.updateSubState('checkoutStatus', 'showShipping', true);
-            }
-            else if (value && key === 'showShipping') {
-                this.updateSubState('checkoutStatus', 'showShipping', false)
-                this.updateSubState('checkoutStatus', 'showPayment', true);
-            }
-            else if (value && key === 'showPayment'){
-                this.updateSubState('checkoutStatus', 'showPayment', false)
-                this.updateSubState('checkoutStatus', 'showConfirmation', true);
-            }
-          }
+        // I guess use this as OrderSummary's handleClick, and pass this info to updateSubState from there 
+        // const { checkoutStatus } = this.state;
+        // for (const [key, value] of Object.entries(checkoutStatus)) {
+        //     if (value && key === 'showCart'){
+        //         this.updateSubState('checkoutStatus', 'showCart', false)
+        //         this.updateSubState('checkoutStatus', 'showShipping', true);
+        //     }
+        //     else if (value && key === 'showShipping') {
+        //         this.updateSubState('checkoutStatus', 'showShipping', false)
+        //         this.updateSubState('checkoutStatus', 'showPayment', true);
+        //     }
+        //     else if (value && key === 'showPayment'){
+        //         this.updateSubState('checkoutStatus', 'showPayment', false)
+        //         this.updateSubState('checkoutStatus', 'showConfirmation', true);
+        //     }
+        //   }
     }
 
     render(){
@@ -86,13 +87,13 @@ class Checkout extends React.Component {
         const { showCart, showShipping, showPayment, showConfirmation } = checkoutStatus;
         return (
             <div className={s.checkoutBg}>
-                <div className={s.close}>
-                        <FontAwesomeIcon 
-                            icon={faXmark}
-                            onClick={this.props.checkoutVisibility}
-                        />
-                </div>
                 <div>
+                    <div className={s.close}>
+                            <FontAwesomeIcon 
+                                icon={faXmark}
+                                onClick={this.props.checkoutVisibility}
+                            />
+                    </div>
                      <CheckoutStatus
                          checkoutStatus={checkoutStatus}
                      />
@@ -119,6 +120,7 @@ class Checkout extends React.Component {
                              cartSubtotal={subtotal}
                              status={checkoutStatus}
                              handleCheckoutClick={this.handleCheckoutClick}
+                             shoppingCartLength={userShoppingCart.length}
                           />
                     </div>
                 </div>

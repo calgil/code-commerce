@@ -17,32 +17,3 @@
     background-repeat: no-repeat;
     background-color: transparent;
 }
-
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 0 40px;
-}
-
-.gear a {
-    text-decoration: none;
-    color: #eee;
-}
-
-.login, .cart { 
-    cursor: pointer;
-    transition: all 200ms;
- }
-
-.login:hover, .cart:hover { color: #333;}
-
-.login {
-    margin-right: 1rem;
-    border: none;
-    background-color: transparent;
-    color: #eee;
-    font-size: 1rem;
-}

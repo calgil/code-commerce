@@ -8,12 +8,48 @@ class OrderSummary extends React.Component {
         this.state = {
             shippingCost: 0,
             cartTotal: '',
+            disableButton: true,
         }
     }
 
+    disableClick = () => {
+        this.setState({ disableButton: false })
+    }
+
+    updateScreen = () => {
+        const {status, shoppingCartLength} = this.props;
+        for (const [key, value] of Object.entries(status)) {
+            if ((value && key === 'showCart') && shoppingCartLength){
+                this.disableClick();
+                console.log('valid click');
+                // this.updateSubState('checkoutStatus', 'showCart', false);
+                // this.updateSubState('checkoutStatus', 'showShipping', true);
+            }
+            else if (value && key === 'showShipping') {
+                // this.updateSubState('checkoutStatus', 'showShipping', false)
+                // this.updateSubState('checkoutStatus', 'showPayment', true);
+            }
+            else if (value && key === 'showPayment'){
+                // this.updateSubState('checkoutStatus', 'showPayment', false)
+                // this.updateSubState('checkoutStatus', 'showConfirmation', true);
+            }
+          }
+    }
+
+    componentDidMount = () => {
+        this.updateScreen();
+
+    }
+
+    handleClick = () => {
+        console.log('click');
+        
+    }
+
+
     render() {
-        const { shippingCost } = this.state
-        const { cartSubtotal } = this.props;
+        const { shippingCost, disableButton } = this.state
+        const { cartSubtotal,  } = this.props;
         return (
             <div className={s.summary}>
                 <div className={s.orderInfo}>
@@ -34,11 +70,15 @@ class OrderSummary extends React.Component {
                     </p>
                 </div>
                 <hr />
-                <InputBase 
-                    type="submit"
-                    value='Checkout'
-                    onClick={this.props.handleCheckoutClick}
-                />
+                <div className={s.btnContainer}>
+                    <InputBase 
+                        className={s.checkoutBtn}
+                        type="submit"
+                        value='Checkout'
+                        onClick={this.handleClick}
+                        disabled={disableButton}
+                    />
+                </div>
             </div>
         )
     }

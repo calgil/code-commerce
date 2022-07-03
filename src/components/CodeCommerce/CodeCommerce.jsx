@@ -1,10 +1,9 @@
 import React from "react";
 import s from './CodeCommerce.module.css'
 import SignIn from "../SignIn/SignIn";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
 import DisplayShop from "../DisplayShop/DisplayShop";
 import Checkout from "../Checkout/Checkout";
+import Header from "../Header/Header";
 
 class CodeCommerce extends React.Component {
     constructor() {
@@ -39,30 +38,21 @@ class CodeCommerce extends React.Component {
         return (
             <div className={s.main}>
                 <div className={s.hero}>
-                    {/* This navbar could be a component and re-used in checkout */}
-                    <header className={s.header}>
-                        <h1 className={s.gear}><a href="./">Gear Shop</a></h1>
-                        <div className={s.links}>
-                            <input 
-                                className={s.login} 
-                                type="button" 
-                                value={'Login'}
-                                onClick={this.toggleShowSignIn}
-                             />
-                             <FontAwesomeIcon
-                                className={s.cart}
-                                icon={faCartShopping}
-                                onClick={this.handleCartClick}
-                            />
-                        </div>
-                    </header>
+                    {/* Need to pass userShoppingCart.length as props */}
+                    < Header 
+                        toggleShowSignIn={this.toggleShowSignIn}
+                        handleCartClick={this.handleCartClick}
+                        // cartLength={}
+                    />
                 </div>
                 {(showSignIn) && 
                 <SignIn 
                     changeLoginStatus={this.updateLogin}
                     signInVisibility={this.toggleShowSignIn}
                 /> }
-                <DisplayShop />
+                { !showCheckout &&
+                    <DisplayShop />
+                }
                 { showCheckout && 
                     <Checkout
                         checkoutVisibility={this.handleCartClick} 
