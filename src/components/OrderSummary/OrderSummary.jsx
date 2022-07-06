@@ -1,6 +1,7 @@
 import React from "react";
 import InputBase from "../InputBase/InputBase";
 import s from './OrderSummary.module.css';
+import {validateCartCheckout} from "../../utilities/validations";
 
 class OrderSummary extends React.Component {
     constructor(props) {
@@ -9,47 +10,104 @@ class OrderSummary extends React.Component {
             shippingCost: 0,
             cartTotal: '',
             disableButton: true,
+            error: {},
         }
     }
 
     disableClick = () => {
-        this.setState({ disableButton: false })
+        this.setState({ 
+            disableButton: false,
+         })
     }
 
-    updateScreen = () => {
-        const {status, shoppingCartLength} = this.props;
-        for (const [key, value] of Object.entries(status)) {
-            if ((value && key === 'showCart') && shoppingCartLength){
+    promptSignIn = () => {
+        const {loggedIn,} = this.props;
+        if (!loggedIn) {
+            this.props.toggleShowSignIn();
+        }
+    }
+
+    validateNextScreen = () => {
+        const {checkoutStatus, userShoppingCart,} = this.props;
+        Object.keys(checkoutStatus).forEach((key) => {
+            let errorText;
+            // let isError = false;
+            switch(key){
+                case 'showCart':
+                        errorText = validateCartCheckout(userShoppingCart);
+                        this.setState((prevState) => ({
+                            error: {
+                                ...prevState.error, 
+                                [`${key}Error`]: errorText,
+                            }
+                        }))
+                    break;
+                case 'showShipping':
+                        errorText = 'show shipping'
+                        this.setState((prevState) => ({
+                            error: {
+                                ...prevState.error, 
+                                [`${key}Error`]: errorText,
+                            }
+                        }))
+                    break;
+                case 'showPayment':
+                    errorText = 'show billing'
+                    break;
+                case 'showConfirmation':
+                    errorText = 'show confirmation'
+                    break;
+                default:
+                    break;
+            }
+        })
+    }
+
+    checkError = () => {
+        const {error} = this.state;
+        let isError = false;
+        Object.keys(error).forEach((key) => {
+            console.log('check', key);
+            if(error[key].length > 0) {
+                isError = true;
                 this.disableClick();
-                console.log('valid click');
-                // this.updateSubState('checkoutStatus', 'showCart', false);
-                // this.updateSubState('checkoutStatus', 'showShipping', true);
-            }
-            else if (value && key === 'showShipping') {
-                // this.updateSubState('checkoutStatus', 'showShipping', false)
-                // this.updateSubState('checkoutStatus', 'showPayment', true);
-            }
-            else if (value && key === 'showPayment'){
-                // this.updateSubState('checkoutStatus', 'showPayment', false)
-                // this.updateSubState('checkoutStatus', 'showConfirmation', true);
-            }
-          }
+            } 
+            // else {
+            //     console.log('error check', error[val]);
+            // }
+            // if ((!error[val].length) && (error[val] === 'showCart')) {
+            //     console.log('next screen');
+            //     this.props.updateScreenState('checkoutStatus', 'showCart', false);
+            //     this.props.updateScreenState('checkoutStatus', 'showShipping', true);
+            // }
+            // console.log(error[val].length);
+        })
+        return isError;
     }
 
-    componentDidMount = () => {
-        this.updateScreen();
-
-    }
+    // componentDidMount = () => {
+    //     this.validateNextScreen();
+    // }
 
     handleClick = () => {
-        console.log('click');
-        
+        const { checkoutStatus, goToShippingScreen, goToPaymentScreen } = this.props;
+        this.validateNextScreen();
+        this.promptSignIn();
+        let errorCheck = this.checkError();
+        if(!errorCheck) {
+            if(checkoutStatus['showCart']){
+                goToShippingScreen();
+            } else if(checkoutStatus['showShipping']) {
+                goToPaymentScreen();
+            }
+            console.log('no error');
+        }
     }
 
 
     render() {
-        const { shippingCost, disableButton } = this.state
-        const { cartSubtotal,  } = this.props;
+        const { shippingCost,  } = this.state
+        const { cartSubtotal, userShoppingCart } = this.props;
         return (
             <div className={s.summary}>
                 <div className={s.orderInfo}>
@@ -76,7 +134,11 @@ class OrderSummary extends React.Component {
                         type="submit"
                         value='Checkout'
                         onClick={this.handleClick}
-                        disabled={disableButton}
+                        disabled={
+                            (!userShoppingCart.length)
+                            ? true
+                            : false 
+                        }
                     />
                 </div>
             </div>

@@ -51,3 +51,11 @@ export const postCodeValidation = (value) => {
         return undefined
     }
 }
+
+export const validateCartCheckout = (userShoppingCart) => {
+    if (userShoppingCart.length === 0) {
+        return 'Cart is empty';
+    } else {
+        return '';
+    }
+}

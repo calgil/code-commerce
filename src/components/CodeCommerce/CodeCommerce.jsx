@@ -18,6 +18,7 @@ class CodeCommerce extends React.Component {
     updateLogin = () => {
         this.setState({ 
             loggedIn: !this.state.loggedIn,
+            showSignIn: !this.state.showSignIn,
          })
     }
 
@@ -34,7 +35,7 @@ class CodeCommerce extends React.Component {
     }
 
     render(){
-        const { showSignIn, showCheckout} = this.state;
+        const { showSignIn, showCheckout, loggedIn} = this.state;
         return (
             <div className={s.main}>
                 <div className={s.hero}>
@@ -55,7 +56,9 @@ class CodeCommerce extends React.Component {
                 }
                 { showCheckout && 
                     <Checkout
-                        checkoutVisibility={this.handleCartClick} 
+                        checkoutVisibility={this.handleCartClick}
+                        loggedIn={loggedIn}
+                        toggleShowSignIn={this.toggleShowSignIn} 
                     /> }
             </div>
         )

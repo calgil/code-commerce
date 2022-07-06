@@ -2,13 +2,13 @@ import React from "react";
 import s from './Checkout.module.css';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import CheckoutStatus from "../CheckoutStatus/CheckoutStatus";
 import Cart from "../Cart/Cart";
 import OrderSummary from "../OrderSummary/OrderSummary";
-import shirt from '../../assets/shirt.jpeg';
-import backpack from '../../assets/backpack.jpeg';
 import Shipping from "../Shipping/Shipping";
 import Payment from "../Payment/Payment";
-import CheckoutStatus from "../CheckoutStatus/CheckoutStatus";
+import shirt from '../../assets/shirt.jpeg';
+import backpack from '../../assets/backpack.jpeg';
 
 class Checkout extends React.Component {
     constructor(props){
@@ -41,20 +41,27 @@ class Checkout extends React.Component {
     }
 
     updateQuantity = (name, value) => {
-        this.setState((prevState) => ({
-            userShoppingCart: prevState.userShoppingCart.map((item) => (
-                item.name === name 
-                ? Object.assign(item, {quantity: value})
-                : item
-            ))
-        }), this.calcSubtotal);
+        if(value > 0) {
+            this.setState((prevState) => ({
+                userShoppingCart: prevState.userShoppingCart.map((item) => (
+                    item.name === name 
+                    ? Object.assign(item, {quantity: value})
+                    : item
+                ))
+            }), this.calcSubtotal);
+        } else {
+            this.setState((prevState) => ({
+                userShoppingCart: prevState.userShoppingCart.filter((item) => item.name !== name)
+            }), this.calcSubtotal);
+        }
+        
     }
 
     componentDidMount() {
         this.calcSubtotal();
     }
 
-    updateSubState = (name, sub, state) => {
+    updateScreenState = (name, sub, state) => {
         this.setState((prevState) => ({
             [name]: {
                 ...prevState[name],
@@ -63,21 +70,31 @@ class Checkout extends React.Component {
         }))
     }
 
+    goToShippingScreen = () => {
+        this.updateScreenState('checkoutStatus', 'showCart', false);
+        this.updateScreenState('checkoutStatus', 'showShipping', true);
+    }
+
+    goToPaymentScreen = () => {
+        this.updateScreenState('checkoutStatus', 'showShipping', false);
+        this.updateScreenState('checkoutStatus', 'showPayment', true);
+    }
+
     handleCheckoutClick = () => {
-        // I guess use this as OrderSummary's handleClick, and pass this info to updateSubState from there 
+        // I guess use this as OrderSummary's handleClick, and pass this info to updateScreenState from there 
         // const { checkoutStatus } = this.state;
         // for (const [key, value] of Object.entries(checkoutStatus)) {
         //     if (value && key === 'showCart'){
-        //         this.updateSubState('checkoutStatus', 'showCart', false)
-        //         this.updateSubState('checkoutStatus', 'showShipping', true);
+        //         this.updateScreenState('checkoutStatus', 'showCart', false)
+        //         this.updateScreenState('checkoutStatus', 'showShipping', true);
         //     }
         //     else if (value && key === 'showShipping') {
-        //         this.updateSubState('checkoutStatus', 'showShipping', false)
-        //         this.updateSubState('checkoutStatus', 'showPayment', true);
+        //         this.updateScreenState('checkoutStatus', 'showShipping', false)
+        //         this.updateScreenState('checkoutStatus', 'showPayment', true);
         //     }
         //     else if (value && key === 'showPayment'){
-        //         this.updateSubState('checkoutStatus', 'showPayment', false)
-        //         this.updateSubState('checkoutStatus', 'showConfirmation', true);
+        //         this.updateScreenState('checkoutStatus', 'showPayment', false)
+        //         this.updateScreenState('checkoutStatus', 'showConfirmation', true);
         //     }
         //   }
     }
@@ -118,9 +135,14 @@ class Checkout extends React.Component {
                          {/* Pass something in as props to update state of checkout process */}
                          <OrderSummary
                              cartSubtotal={subtotal}
-                             status={checkoutStatus}
+                             checkoutStatus={checkoutStatus}
                              handleCheckoutClick={this.handleCheckoutClick}
-                             shoppingCartLength={userShoppingCart.length}
+                             userShoppingCart={userShoppingCart}
+                             updateScreenState={this.updateScreenState}
+                             loggedIn={this.props.loggedIn}
+                             toggleShowSignIn={this.props.toggleShowSignIn}
+                             goToShippingScreen={this.goToShippingScreen}
+                             goToPaymentScreen={this.goToPaymentScreen}
                           />
                     </div>
                 </div>
