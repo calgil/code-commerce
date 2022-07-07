@@ -43,12 +43,10 @@ export const onlyTextValidation = (value) => {
 }
 
 export const postCodeValidation = (value) => {
-    if(value.length < 4) {
-        return 'Incomplete Postal Code'
-    } else if (value.length > 10) {
-        return 'Postal Code too long'
+    if(value.length === 5) {
+        return undefined;
     } else {
-        return undefined
+        return 'Invalid Zip code'
     }
 }
 

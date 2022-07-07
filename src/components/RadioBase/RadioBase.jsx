@@ -1,9 +1,9 @@
 import React from "react";
 import './RadioBase.css';
 
-const RadioBase = ({labelText, type, ...props}) => (
+const RadioBase = ({labelText, name, type, ...props}) => (
 <label>
-   <input name='signIn' type={type} {...props} />
+   <input name={name} type={type} {...props} />
    {labelText}
 </label>
 )

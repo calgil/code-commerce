@@ -2,7 +2,6 @@
     width: 100%;
     padding: 0 40px;
     color: #333;
-    margin: 20px;
     background-color: #eee;
     border-radius: 10px;
 }
@@ -14,6 +13,29 @@
     border-bottom: 1px solid #333;
     background-color: transparent;
     line-height: 2;
+}
+
+.shippingMethod input[type="radio"] {
+    width: auto;
+    margin-bottom: 15px;
+ }
+
+.back {
+    padding: 0.25rem;
+    font-weight: 500;
+    font-size: 14px;
+    background-color: #fff;
+    outline: none;
+    border: 1px solid #333;
+    border-radius: 5px;
+    margin-top: 15px;
+    cursor: pointer;
+    transition: all 250ms;
+}
+
+.back:hover {
+    background-color: #eee;
+    padding: 0.5rem;
 }
 
 @media only screen and (max-width: 900px) {

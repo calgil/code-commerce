@@ -26,6 +26,8 @@
 
 form { padding: 0 20px; }
 
+.header { text-align: center; }
+
 .radioContainer {
     width: 100%;
     display: flex;

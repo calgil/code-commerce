@@ -2,6 +2,7 @@
     background-color: #333;
     color: #eee;
     min-height: 300px;
+    max-height: 800px;
     width: 100%;
     max-width: 400px;
     padding: 20px;
@@ -18,7 +19,13 @@
     color: #eee;
 }
 
-.orderInfo > p {
+
+.total {
+    width: 100%;
+}
+
+.info > p,
+.total > p {
     display: flex;
     justify-content: space-between;
     padding: 0.5rem;

@@ -21,6 +21,7 @@ class Checkout extends React.Component {
                 showConfirmation: false,
             },
             subtotal: 0,
+            shippingCost: '',
             userShoppingCart: [
                 { name: 'T-Shirt', quantity: 1, image: shirt, price: 19.99, },
                 { name: 'Backpack', quantity: 1, image: backpack, price: 49.99, },
@@ -28,7 +29,11 @@ class Checkout extends React.Component {
         }
     }
 
-    updateStateSubtotal = (newSubtotal) => {
+    updateShippingCostState = (value) => {
+        this.setState({shippingCost: value})
+    }
+
+    updateSubtotalState = (newSubtotal) => {
         this.setState({ subtotal: newSubtotal })
     }
 
@@ -37,7 +42,7 @@ class Checkout extends React.Component {
         const subtotal = userShoppingCart.reduce((acc, obj) => {
             return acc + (obj.quantity * obj.price)
         }, 0);
-        this.updateStateSubtotal(subtotal);
+        this.updateSubtotalState(subtotal);
     }
 
     updateQuantity = (name, value) => {
@@ -70,6 +75,11 @@ class Checkout extends React.Component {
         }))
     }
 
+    goToCartScreen = () => {
+        this.updateScreenState('checkoutStatus', 'showCart', true);
+        this.updateScreenState('checkoutStatus', 'showShipping', false);
+    }
+
     goToShippingScreen = () => {
         this.updateScreenState('checkoutStatus', 'showCart', false);
         this.updateScreenState('checkoutStatus', 'showShipping', true);
@@ -100,7 +110,7 @@ class Checkout extends React.Component {
     }
 
     render(){
-        const { userShoppingCart, subtotal, checkoutStatus } = this.state;
+        const { userShoppingCart, subtotal, checkoutStatus, shippingCost } = this.state;
         const { showCart, showShipping, showPayment, showConfirmation } = checkoutStatus;
         return (
             <div className={s.checkoutBg}>
@@ -121,10 +131,13 @@ class Checkout extends React.Component {
                          {  ( showCart ) &&
                          <Cart 
                              shoppingCartItems={userShoppingCart}
-                             updateItemQuantity={this.updateQuantity}
+                             updateQuantity={this.updateQuantity}
                          />}
                          { ( showShipping ) && 
-                         <Shipping />
+                         <Shipping 
+                            goToCartScreen={this.goToCartScreen}
+                            updateShippingCost={this.updateShippingCostState}
+                         />
                          }
                          { ( showPayment ) && 
                          <Payment />
@@ -143,6 +156,7 @@ class Checkout extends React.Component {
                              toggleShowSignIn={this.props.toggleShowSignIn}
                              goToShippingScreen={this.goToShippingScreen}
                              goToPaymentScreen={this.goToPaymentScreen}
+                             shippingCost={shippingCost}
                           />
                     </div>
                 </div>

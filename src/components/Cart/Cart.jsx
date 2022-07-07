@@ -23,7 +23,7 @@ const Cart = ({...props}) => {
                         img={item.image}
                         price={item.price}
                         quantity={item.quantity}
-                        newQuantity={props.updateItemQuantity}
+                        updateQuantity={props.updateQuantity}
                     />
                 ))}
             </div>

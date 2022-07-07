@@ -1,5 +1,5 @@
 import React from "react";
-import style  from './SignIn.module.css';
+import s  from './SignIn.module.css';
 import RadioBase from "../RadioBase/RadioBase";
 import InputBase from "../InputBase/InputBase";
 import { 
@@ -197,13 +197,17 @@ class SignIn extends React.Component {
 
         return (
                 <div 
-                    className={style.signInBg}
+                    className={s.signInBg}
                 >
                     <form 
                     onSubmit={this.handleLogin}
-                    className={style.signIn}
+                    className={s.signIn}
                     >
-                        <div className={style.radioContainer}>
+                        { newAccount
+                            ? <h3 className={s.header}>Create an Account</h3>
+                            : <h3 className={s.header}>Sign In</h3>
+                        }
+                        <div className={s.radioContainer}>
                                 <RadioBase 
                                     name='account'
                                     labelText='Sign In'
@@ -222,7 +226,7 @@ class SignIn extends React.Component {
                                 />
                                 
                         </div>
-                        <div className={style.inputs}>
+                        <div className={s.inputs}>
                                 <InputBase
                                     labelText={'Email *'}
                                     name={'email'}
@@ -240,7 +244,7 @@ class SignIn extends React.Component {
                                     }
                                 />
                                  <InputBase
-                                    className={style.password}
+                                    className={s.password}
                                     labelText={'Password *'}
                                     name={'password'}
                                     type={'password'}
@@ -257,7 +261,7 @@ class SignIn extends React.Component {
                                     }
                                 />
                                 {newAccount && <InputBase
-                                    className={style.password}
+                                    className={s.password}
                                     labelText={'Confirm Password *'}
                                     name={'confirmPassword'}
                                     type={ 'password'}
@@ -294,12 +298,12 @@ class SignIn extends React.Component {
                                 ))}
                                 
                         </div>
-                        <div className={style.btnWrapper}>
+                        <div className={s.btnWrapper}>
                             <InputBase type='submit' value={newAccount ?'SAVE' : 'LOGIN'} />
-                            <div className={style.line}><hr className={style.rule} /> <span>or</span> <hr className={style.rule} /></div>
-                            <InputBase className={style.facebook} type='submit' value={newAccount ?'SIGN UP WITH FACEBOOK' : 'SIGN IN WITH FACEBOOK'} />
-                            <input onClick={this.props.signInVisibility} className={style.cancel} type="button" value={'Cancel'} />
-                            <div className={style.tos}>
+                            <div className={s.line}><hr className={s.rule} /> <span>or</span> <hr className={s.rule} /></div>
+                            <InputBase className={s.facebook} type='submit' value={newAccount ?'SIGN UP WITH FACEBOOK' : 'SIGN IN WITH FACEBOOK'} />
+                            <input onClick={this.props.signInVisibility} className={s.cancel} type="button" value={'Cancel'} />
+                            <div className={s.tos}>
                                 <a href="www">Privacy Policy and Cookies</a>
                                 <span>|</span>
                                 <a href="www">Terms of Sale and Use</a>

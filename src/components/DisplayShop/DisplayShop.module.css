@@ -1,5 +1,8 @@
 .containerHeader {
-    margin-left: 2rem;
+    text-align: center;
+    color: #eee;
+    margin-bottom: 30px;
+    font-size: 25px;
 }
 
 .shopContainer {

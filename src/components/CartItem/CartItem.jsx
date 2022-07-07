@@ -10,12 +10,12 @@ class CartItem extends React.Component {
     }
 
     handleQuantityChange = ({ target: { name, value }}) => {
-        this.props.newQuantity(name, +value);
+        this.props.updateQuantity(name, +value);
     }
 
     removeItem = () => {
         const { name } = this.props
-        this.props.newQuantity(name, 0);
+        this.props.updateQuantity(name, 0);
     }
 
     render() {
