@@ -6,10 +6,11 @@ class Payment extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            
         }
     }
     render(){
+        const { goToShippingScreen } = this.props;
 
         const paymentInputs = [
             {name: 'cardHolderName', labelText: 'Card Holder Name *', type: 'text', error: 'cardHolderNameError' },
@@ -21,6 +22,10 @@ class Payment extends React.Component {
 
         return (
             <div className={s.paymentContainer}>
+                <button className={s.back} onClick={goToShippingScreen}>
+                    Back to Shipping
+                </button>
+
                 <h3>Payment</h3>
                 {paymentInputs.map((item) => (
                     <InputBase

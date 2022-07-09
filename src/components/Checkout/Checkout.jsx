@@ -7,8 +7,16 @@ import Cart from "../Cart/Cart";
 import OrderSummary from "../OrderSummary/OrderSummary";
 import Shipping from "../Shipping/Shipping";
 import Payment from "../Payment/Payment";
+import InputBase from "../InputBase/InputBase";
 import shirt from '../../assets/shirt.jpeg';
 import backpack from '../../assets/backpack.jpeg';
+import { SHIPPING_DATA } from "../../utilities/constants";
+import { 
+    onlyTextValidation,
+    phoneValidation,
+    postCodeValidation,
+ } from "../../utilities/validations";
+
 
 class Checkout extends React.Component {
     constructor(props){
@@ -26,6 +34,9 @@ class Checkout extends React.Component {
                 { name: 'T-Shirt', quantity: 1, image: shirt, price: 19.99, },
                 { name: 'Backpack', quantity: 1, image: backpack, price: 49.99, },
             ],
+            shippingData: SHIPPING_DATA,
+            shippingError: {},
+            disableButton: '',
         }
     }
 
@@ -75,59 +86,156 @@ class Checkout extends React.Component {
         }))
     }
 
+    resetScreenState = () => {
+        const {checkoutStatus } = this.state;
+        Object.keys(checkoutStatus).forEach((val) => {
+            this.setState((prevState) => ({
+                checkoutStatus: {
+                    ...prevState.checkoutStatus,
+                    [`${val}`]: false,
+                }
+            }))
+        })
+    }
+
+    setNewScreenState = (visibleScreen) => {
+        const {checkoutStatus } = this.state;
+        this.resetScreenState();
+        Object.keys(checkoutStatus).forEach((val) => {
+            if (val === visibleScreen) {
+                this.setState((prevState) => ({
+                    checkoutStatus: {
+                        ...prevState.checkoutStatus,
+                        [`${val}`]: true,
+                    }
+                }))
+            } 
+        })
+    }
+
+    // is there a way to replace all of these functions 
+    // sets all of checkoutStatus to false, resetScreenStatus, except for the desired one?
     goToCartScreen = () => {
-        this.updateScreenState('checkoutStatus', 'showCart', true);
-        this.updateScreenState('checkoutStatus', 'showShipping', false);
+        this.setNewScreenState('showCart');
     }
 
     goToShippingScreen = () => {
-        this.updateScreenState('checkoutStatus', 'showCart', false);
-        this.updateScreenState('checkoutStatus', 'showShipping', true);
+        const {loggedIn,} = this.props;
+        if (!loggedIn) {
+            this.props.toggleShowSignIn();
+        } else {
+            this.setNewScreenState('showShipping');
+        }
     }
 
     goToPaymentScreen = () => {
-        this.updateScreenState('checkoutStatus', 'showShipping', false);
-        this.updateScreenState('checkoutStatus', 'showPayment', true);
+        this.setNewScreenState('showPayment');
     }
 
-    handleCheckoutClick = () => {
-        // I guess use this as OrderSummary's handleClick, and pass this info to updateScreenState from there 
-        // const { checkoutStatus } = this.state;
-        // for (const [key, value] of Object.entries(checkoutStatus)) {
-        //     if (value && key === 'showCart'){
-        //         this.updateScreenState('checkoutStatus', 'showCart', false)
-        //         this.updateScreenState('checkoutStatus', 'showShipping', true);
-        //     }
-        //     else if (value && key === 'showShipping') {
-        //         this.updateScreenState('checkoutStatus', 'showShipping', false)
-        //         this.updateScreenState('checkoutStatus', 'showPayment', true);
-        //     }
-        //     else if (value && key === 'showPayment'){
-        //         this.updateScreenState('checkoutStatus', 'showPayment', false)
-        //         this.updateScreenState('checkoutStatus', 'showConfirmation', true);
-        //     }
-        //   }
+    goToConfirmationScreen = () => {
+        this.setNewScreenState('showConfirmation');
+    }
+
+    updateShippingData = (name, value) => {
+        this.setState((prevState) => ({
+            shippingData: {
+                ...prevState.shippingData, 
+                [name]: value,
+            }
+        }))
+    }
+
+    handleShippingValidations = (type, value) => {
+        let errorText;
+        if (
+            type === 'title'
+            || type === 'name'
+            || type === 'city'
+            || type === 'state'
+            ) {
+                errorText = onlyTextValidation(value);
+                this.setState((prevState) => ({
+                    shippingError: {
+                        ...prevState.shippingError,
+                        [`${type}Error`]: errorText,
+                    }
+                }))
+        } else if (type === 'phone') {
+                errorText = phoneValidation(value);
+
+                this.setState((prevState) => ({
+                    shippingError: {
+                        ...prevState.shippingError,
+                        [`${type}Error`]: errorText,
+                    }
+                }))
+            
+        } else if (type === 'postcode') {
+                errorText = postCodeValidation(value);
+                this.setState((prevState) => ({
+                    shippingError: {
+                        ...prevState.shippingError,
+                        [`${type}Error`]: errorText,
+                    }
+                }))
+        }
+    }
+
+    checkShippingError = () => {
+        // I think I can refactor this function with sign in and billing validation ?
+        const { shippingData, shippingError } = this.state;
+        let errorValue = {};
+        let isError = false;
+        
+        Object.keys(shippingData).forEach((val) => {
+            if(!shippingData[val].length) {
+                errorValue = { ...errorValue, [`${val}Error`]: 'Required'}
+                isError = true;
+            }
+        })
+        this.setState({ shippingError: errorValue })
+        Object.keys(shippingError).forEach((val) => {
+            if(shippingError[val]) {
+                isError = true;
+            }
+        })
+        Object.keys(shippingData).forEach((val) => {
+            if(shippingData[val].length) {
+                this.handleShippingValidations(val, shippingData[val]);
+            }
+        })
+        return isError;
+    }
+
+    checkShipping = () => {
+        const { shippingCost } = this.state;
+        // console.log('cost',typeof shippingCost === 'string');
+        let checkError = this.checkShippingError();
+        if (typeof shippingCost === 'string') {
+            checkError = true;
+        }
+        if (!checkError) {
+            this.goToPaymentScreen()
+        }
     }
 
     render(){
-        const { userShoppingCart, subtotal, checkoutStatus, shippingCost } = this.state;
+        const { userShoppingCart, subtotal, checkoutStatus, shippingCost,shippingData, shippingError } = this.state;
         const { showCart, showShipping, showPayment, showConfirmation } = checkoutStatus;
         return (
             <div className={s.checkoutBg}>
                 <div>
                     <div className={s.close}>
-                            <FontAwesomeIcon 
-                                icon={faXmark}
-                                onClick={this.props.checkoutVisibility}
-                            />
+                        <FontAwesomeIcon 
+                            icon={faXmark}
+                            onClick={this.props.checkoutVisibility}
+                        />
                     </div>
                      <CheckoutStatus
                          checkoutStatus={checkoutStatus}
                      />
                     <div className={s.checkoutBody}>
-                             {/* build this thing. It should be pretty fun */}
-                             {/* Will implement progress bar here */}
-                             {/* eventually I want a message to appear if all items have been removed from cart */}
+                        {/* Add a message if the cart is empty */}
                          {  ( showCart ) &&
                          <Cart 
                              shoppingCartItems={userShoppingCart}
@@ -137,27 +245,47 @@ class Checkout extends React.Component {
                          <Shipping 
                             goToCartScreen={this.goToCartScreen}
                             updateShippingCost={this.updateShippingCostState}
+                            updateShippingData={this.updateShippingData}
+                            handleShippingValidations={this.handleShippingValidations}
+                            shippingData={shippingData}
+                            shippingError={shippingError}
                          />
                          }
                          { ( showPayment ) && 
-                         <Payment />
+                         <Payment 
+                            goToShippingScreen={this.goToShippingScreen}
+                         />
                          }
                          { ( showConfirmation ) &&
                              <h3>Confirmation</h3>
                          }
-                         {/* Pass something in as props to update state of checkout process */}
                          <OrderSummary
                              cartSubtotal={subtotal}
                              checkoutStatus={checkoutStatus}
-                             handleCheckoutClick={this.handleCheckoutClick}
                              userShoppingCart={userShoppingCart}
-                             updateScreenState={this.updateScreenState}
-                             loggedIn={this.props.loggedIn}
-                             toggleShowSignIn={this.props.toggleShowSignIn}
-                             goToShippingScreen={this.goToShippingScreen}
-                             goToPaymentScreen={this.goToPaymentScreen}
                              shippingCost={shippingCost}
                           />
+                          {( showCart ) && 
+                            <InputBase 
+                                className={s.checkoutBtn}
+                                type="submit"
+                                value='Checkout'
+                                onClick={this.goToShippingScreen}
+                                disabled={
+                                    (!userShoppingCart.length)
+                                    ? true
+                                    : false 
+                                    }
+                            />
+                          }
+                          { ( showShipping ) && 
+                            <InputBase 
+                                className={s.checkoutBtn}
+                                type="submit"
+                                value='Checkout'
+                                onClick={this.checkShipping}
+                            />
+                            }
                     </div>
                 </div>
             </div>

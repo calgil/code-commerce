@@ -6,4 +6,7 @@
 
 h1 { text-align: center; }
 
-
+:root { 
+    height: 100%;
+    overflow: hidden;
+ }

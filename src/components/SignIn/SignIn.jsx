@@ -2,6 +2,7 @@ import React from "react";
 import s  from './SignIn.module.css';
 import RadioBase from "../RadioBase/RadioBase";
 import InputBase from "../InputBase/InputBase";
+import { USER_DATA } from "../../utilities/constants";
 import { 
     emailValidation, 
     passwordValidation, 
@@ -9,17 +10,6 @@ import {
     onlyTextValidation,
     postCodeValidation
 } from "../../utilities/validations";
-
-const USER_DATA = {
-    email: '',
-    password: '',
-    confirmPassword: '',
-    firstName: '',
-    lastName: '',
-    postCode: '',
-    isLoggedIn: false,
-}
-
 
 class SignIn extends React.Component {
     constructor(props) {
@@ -45,7 +35,7 @@ class SignIn extends React.Component {
                 this.setState((prevState) => ({
                     error: {
                         ...prevState.error,
-                        emailError: errorText
+                        [`${type}Error`]: errorText
                     }
                 }))
                 break;
@@ -54,7 +44,7 @@ class SignIn extends React.Component {
                 this.setState((prevState) => ({
                     error: {
                         ...prevState.error,
-                        passwordError: errorText
+                        [`${type}Error`]: errorText
                     }
                 }));
                 break;
@@ -64,7 +54,7 @@ class SignIn extends React.Component {
                 this.setState((prevState) => ({
                     error: {
                         ...prevState.error,
-                        confirmPasswordError: errorText,
+                        [`${type}Error`]: errorText,
                     }
                 }))
                 break;
@@ -73,7 +63,7 @@ class SignIn extends React.Component {
                 this.setState((prevState) => ({
                     error: {
                         ...prevState.error,
-                        firstNameError: errorText,
+                        [`${type}Error`]: errorText,
                     }
                 }))
                 break;
@@ -82,7 +72,7 @@ class SignIn extends React.Component {
                 this.setState((prevState) => ({
                     error: {
                         ...prevState.error,
-                        lastNameError: errorText,
+                        [`${type}Error`]: errorText,
                     }
                 }))
                 break;
@@ -91,7 +81,7 @@ class SignIn extends React.Component {
                 this.setState((prevState) => ({
                     error: {
                         ...prevState.error,
-                        postCodeError: errorText,
+                        [`${type}Error`]: errorText,
                     }
                 }))
                 break;

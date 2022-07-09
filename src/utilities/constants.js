@@ -30,3 +30,22 @@ export const items = [
 //     rope: rope_img,
 // }
 
+export const USER_DATA = {
+    email: '',
+    password: '',
+    confirmPassword: '',
+    firstName: '',
+    lastName: '',
+    postCode: '',
+}
+
+export const SHIPPING_DATA = {
+    title: '',
+    name: '',
+    address: '',
+    phone: '',
+    city: '',
+    state: '',
+    postcode: '',
+    country: '',
+}

@@ -57,3 +57,12 @@ export const validateCartCheckout = (userShoppingCart) => {
         return '';
     }
 }
+
+export const phoneValidation = (phoneNumber) => {
+    if (phoneNumber.length === 10) {
+        return undefined
+    } else {
+        return 'Invalid phone number'
+    }
+    
+}

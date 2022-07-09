@@ -5,3 +5,8 @@
     margin-top: 5px;
     max-width: 150px;
 }
+
+.error { 
+    padding-top: 0.5rem;
+    color: red;
+}

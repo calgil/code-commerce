@@ -4,6 +4,7 @@
     color: #333;
     background-color: #eee;
     border-radius: 10px;
+    overflow-y: scroll;
 }
 
 .shippingContainer input {
@@ -24,8 +25,8 @@
     padding: 0.25rem;
     font-weight: 500;
     font-size: 14px;
-    background-color: #fff;
     outline: none;
+    background-color: #eee;
     border: 1px solid #333;
     border-radius: 5px;
     margin-top: 15px;
@@ -34,8 +35,11 @@
 }
 
 .back:hover {
-    background-color: #eee;
     padding: 0.5rem;
+}
+
+.shippingCostError {
+    color: red;
 }
 
 @media only screen and (max-width: 900px) {
