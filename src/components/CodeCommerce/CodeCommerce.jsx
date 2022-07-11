@@ -12,6 +12,25 @@ class CodeCommerce extends React.Component {
             loggedIn: false,
             showSignIn: false, 
             showCheckout: false,
+            userShoppingCart: [],
+        }
+    }
+
+    updateShoppingCart = (newItem) => {
+        const {userShoppingCart} = this.state;
+        if (!userShoppingCart.includes(newItem)) {
+            newItem.quantity += 1
+            this.setState((prevState) => ({
+                userShoppingCart: [...prevState.userShoppingCart, newItem]
+            }))
+        } else {
+            this.setState((prevState) => ({
+                userShoppingCart: prevState.userShoppingCart.map((item) => (
+                    item.name === newItem.name 
+                    ? Object.assign(item, {quantity: item.quantity += 1})
+                    : item
+                ))
+            }));
         }
     }
 
@@ -35,7 +54,7 @@ class CodeCommerce extends React.Component {
     }
 
     render(){
-        const { showSignIn, showCheckout, loggedIn} = this.state;
+        const { showSignIn, showCheckout, loggedIn, userShoppingCart} = this.state;
         return (
             <div className={s.main}>
                 <div className={s.hero}>
@@ -52,13 +71,16 @@ class CodeCommerce extends React.Component {
                     signInVisibility={this.toggleShowSignIn}
                 /> }
                 { !showCheckout &&
-                    <DisplayShop />
+                    <DisplayShop 
+                        updateShoppingCart={this.updateShoppingCart}
+                    />
                 }
                 { showCheckout && 
                     <Checkout
                         checkoutVisibility={this.handleCartClick}
                         loggedIn={loggedIn}
                         toggleShowSignIn={this.toggleShowSignIn} 
+                        cart={userShoppingCart}
                     /> }
             </div>
         )

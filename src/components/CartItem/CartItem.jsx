@@ -1,5 +1,6 @@
 import React from "react";
 import s from './CartItem.module.css';
+import { itemImgs } from "../../utilities/constants";
 
 class CartItem extends React.Component {
     constructor(props){
@@ -30,7 +31,7 @@ class CartItem extends React.Component {
                     <div className={s.product}>
                         <h4 className={s.itemName}>{name}</h4>
                         <div className={s.imgContainer}>
-                            <img src={img} alt={name} />
+                            <img src={itemImgs[img]} alt={name} />
                         </div>
                     </div>
                     <div className={s.itemInfo}>
@@ -44,6 +45,7 @@ class CartItem extends React.Component {
                                 name={name} 
                                 id="qty"
                                 defaultValue={1}
+                                value={quantity}
                                 >
                                 <option value={0}>0</option>
                                 <option value={1}>1</option>

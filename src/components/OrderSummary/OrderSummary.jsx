@@ -1,14 +1,10 @@
 import React from "react";
-// import InputBase from "../InputBase/InputBase";
 import s from './OrderSummary.module.css';
-import {validateCartCheckout} from "../../utilities/validations";
 
 class OrderSummary extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            cartTotal: '',
-            error: {},
         }
     }
 
@@ -22,7 +18,7 @@ class OrderSummary extends React.Component {
                         <p><span>Subtotal:</span>{
                             (cartSubtotal === 0) 
                             ? '' 
-                            : <span className={s.subtotal}> ${cartSubtotal} </span>
+                            : <span className={s.subtotal}> ${Number(cartSubtotal).toFixed(2)} </span>
                         }</p>
                         <p><span>Shipping & Handling:</span>{
                             (shippingCost === '')
@@ -34,7 +30,7 @@ class OrderSummary extends React.Component {
                         <hr />
                         <p className={s.cartTotal}>
                             <span>Cart Total:</span>
-                            <span className={s.cartTotal}>${cartSubtotal + shippingCost}</span>
+                            <span className={s.cartTotal}>${Number(cartSubtotal + shippingCost).toFixed(2)}</span>
                         </p>
 
                     </div>

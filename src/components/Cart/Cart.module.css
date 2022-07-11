@@ -4,6 +4,7 @@
     color: #333;
     background-color: #eee;
     border-radius: 10px;
+    overflow-y: scroll;
 }
 
 .title { 

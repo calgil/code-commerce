@@ -15,7 +15,7 @@ class Shipping extends React.Component {
     handleBlur = ({ target: { name, value } }) => this.props.handleShippingValidations(name, value);
 
     handleInputData = ({ target: { name, value } }) => {
-        this.props.updateShippingData(name, value)
+        this.props.updateData('shippingData', name, value)
     }
 
     handleRadioChange = ({ target: { value } }) => {

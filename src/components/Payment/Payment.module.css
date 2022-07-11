@@ -29,7 +29,7 @@
     transition: all 250ms;
 }
 
-.back:hover {
+.back:hover, .back:focus {
     padding: 0.5rem;
 }
 

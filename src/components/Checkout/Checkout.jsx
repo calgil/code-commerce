@@ -7,14 +7,16 @@ import Cart from "../Cart/Cart";
 import OrderSummary from "../OrderSummary/OrderSummary";
 import Shipping from "../Shipping/Shipping";
 import Payment from "../Payment/Payment";
+import Confirmation from "../Confirmation/Confirmation";
 import InputBase from "../InputBase/InputBase";
-import shirt from '../../assets/shirt.jpeg';
-import backpack from '../../assets/backpack.jpeg';
-import { SHIPPING_DATA } from "../../utilities/constants";
+import { SHIPPING_DATA, INIT_CARD_DATA } from "../../utilities/constants";
 import { 
     onlyTextValidation,
     phoneValidation,
     postCodeValidation,
+    cardNumberValidation,
+    cardExpireValidation,
+    securityCodeValidation,
  } from "../../utilities/validations";
 
 
@@ -30,13 +32,12 @@ class Checkout extends React.Component {
             },
             subtotal: 0,
             shippingCost: '',
-            userShoppingCart: [
-                { name: 'T-Shirt', quantity: 1, image: shirt, price: 19.99, },
-                { name: 'Backpack', quantity: 1, image: backpack, price: 49.99, },
-            ],
+            userShoppingCart: this.props.cart,
             shippingData: SHIPPING_DATA,
             shippingError: {},
             disableButton: '',
+            cardData: INIT_CARD_DATA,
+            cardError: {},
         }
     }
 
@@ -57,7 +58,8 @@ class Checkout extends React.Component {
     }
 
     updateQuantity = (name, value) => {
-        if(value > 0) {
+        // needs work remove button not working
+        // if(value > 0) {
             this.setState((prevState) => ({
                 userShoppingCart: prevState.userShoppingCart.map((item) => (
                     item.name === name 
@@ -65,25 +67,17 @@ class Checkout extends React.Component {
                     : item
                 ))
             }), this.calcSubtotal);
-        } else {
-            this.setState((prevState) => ({
-                userShoppingCart: prevState.userShoppingCart.filter((item) => item.name !== name)
-            }), this.calcSubtotal);
-        }
+        // } 
+        // else {
+        //     this.setState((prevState) => ({
+        //         userShoppingCart: [prevState.userShoppingCart.filter((item) => item.name !== name)]
+        //     }), this.calcSubtotal);
+        // }
         
     }
 
     componentDidMount() {
         this.calcSubtotal();
-    }
-
-    updateScreenState = (name, sub, state) => {
-        this.setState((prevState) => ({
-            [name]: {
-                ...prevState[name],
-                [sub]: state,
-            }
-        }))
     }
 
     resetScreenState = () => {
@@ -113,8 +107,6 @@ class Checkout extends React.Component {
         })
     }
 
-    // is there a way to replace all of these functions 
-    // sets all of checkoutStatus to false, resetScreenStatus, except for the desired one?
     goToCartScreen = () => {
         this.setNewScreenState('showCart');
     }
@@ -136,11 +128,11 @@ class Checkout extends React.Component {
         this.setNewScreenState('showConfirmation');
     }
 
-    updateShippingData = (name, value) => {
+    updateData = (name, sub, state) => {
         this.setState((prevState) => ({
-            shippingData: {
-                ...prevState.shippingData, 
-                [name]: value,
+            [name]: {
+                ...prevState[name],
+                [sub]: state,
             }
         }))
     }
@@ -181,6 +173,33 @@ class Checkout extends React.Component {
         }
     }
 
+    // checkError = (data, error) => {
+    //     console.log( error);
+    //     // I think I can refactor this function with sign in and billing validation ?
+    //     // const { shippingData, shippingError } = this.state;
+    //     let errorValue = {};
+    //     let isError = false;
+        
+    //     Object.keys(data).forEach((val) => {
+    //         if(!data[val].length) {
+    //             errorValue = { ...errorValue, [`${val}Error`]: 'Required'}
+    //             isError = true;
+    //         }
+    //     })
+    //     this.setState({ error: errorValue })
+    //     Object.keys(error).forEach((val) => {
+    //         if(error[val]) {
+    //             isError = true;
+    //         }
+    //     })
+    //     Object.keys(data).forEach((val) => {
+    //         if(data[val].length) {
+    //             this.handleShippingValidations(val, data[val]);
+    //         }
+    //     })
+    //     return isError;
+    // }
+
     checkShippingError = () => {
         // I think I can refactor this function with sign in and billing validation ?
         const { shippingData, shippingError } = this.state;
@@ -208,8 +227,7 @@ class Checkout extends React.Component {
     }
 
     checkShipping = () => {
-        const { shippingCost } = this.state;
-        // console.log('cost',typeof shippingCost === 'string');
+        const { shippingCost, } = this.state;
         let checkError = this.checkShippingError();
         if (typeof shippingCost === 'string') {
             checkError = true;
@@ -219,9 +237,98 @@ class Checkout extends React.Component {
         }
     }
 
+    handleCardValidations = (type, value) => {
+        let errorText;
+        switch(type){
+            case 'cardHolderName':
+                errorText = onlyTextValidation(value);
+                this.setState((prevState) => ({
+                    cardError: {
+                        ...prevState.cardError,
+                        [`${type}Error`]: errorText,
+                    }
+                }))
+                break;
+            case 'cardNumber':
+                errorText = cardNumberValidation(value);
+                this.setState((prevState) => ({
+                    cardError: {
+                        ...prevState.cardError,
+                        [`${type}Error`]: errorText,
+                    }
+                }))
+                break;
+            case 'cardExpiration':
+                errorText = cardExpireValidation(value);
+                this.setState((prevState) => ({
+                    cardError: {
+                        ...prevState.cardError,
+                        [`${type}Error`]: errorText,
+                    }
+                }))
+                break;
+            case 'cardSecurity':
+                errorText = securityCodeValidation(3, value);
+                this.setState((prevState) => ({
+                    cardError: {
+                        ...prevState.cardError,
+                        [`${type}Error`]: errorText,
+                    }
+                }))
+                break;
+                default:
+                    break;
+        }
+    }
+
+    // ahhh!! this sucks! 
+
+    checkPaymentError = () => {
+        const { cardData, cardError } = this.state;
+        let errorValue = {};
+        let isError = false;
+        
+        Object.keys(cardData).forEach((val) => {
+            if(!cardData[val].length) {
+                errorValue = { ...errorValue, [`${val}Error`]: 'Required'}
+                isError = true;
+            }
+        })
+        this.setState(({ cardError: errorValue }))
+        Object.keys(cardError).forEach((val) => {
+            if(cardError[val]) {
+                isError = true;
+            }
+        })
+        Object.keys(cardData).forEach((val) => {
+            if(cardData[val].length) {
+                this.handleShippingValidations(val, cardData[val]);
+            }
+        })
+        return isError;
+    }
+
+    checkPayment = () => {
+        let checkError = this.checkPaymentError();
+        if(!checkError) {
+            this.goToConfirmationScreen();
+        }
+    }
+
     render(){
-        const { userShoppingCart, subtotal, checkoutStatus, shippingCost,shippingData, shippingError } = this.state;
+        const { 
+            // userShoppingCart, 
+            subtotal, 
+            checkoutStatus, 
+            shippingCost,
+            shippingData, 
+            shippingError,
+            cardData,
+            cardError,
+         } = this.state;
+
         const { showCart, showShipping, showPayment, showConfirmation } = checkoutStatus;
+        const { cart } = this.props;
         return (
             <div className={s.checkoutBg}>
                 <div>
@@ -238,14 +345,14 @@ class Checkout extends React.Component {
                         {/* Add a message if the cart is empty */}
                          {  ( showCart ) &&
                          <Cart 
-                             shoppingCartItems={userShoppingCart}
+                             shoppingCartItems={cart}
                              updateQuantity={this.updateQuantity}
                          />}
                          { ( showShipping ) && 
                          <Shipping 
                             goToCartScreen={this.goToCartScreen}
                             updateShippingCost={this.updateShippingCostState}
-                            updateShippingData={this.updateShippingData}
+                            updateData={this.updateData}
                             handleShippingValidations={this.handleShippingValidations}
                             shippingData={shippingData}
                             shippingError={shippingError}
@@ -254,15 +361,19 @@ class Checkout extends React.Component {
                          { ( showPayment ) && 
                          <Payment 
                             goToShippingScreen={this.goToShippingScreen}
+                            updateData={this.updateData}
+                            handleCardValidations={this.handleCardValidations}
+                            cardData={cardData}
+                            cardError={cardError}
                          />
                          }
                          { ( showConfirmation ) &&
-                             <h3>Confirmation</h3>
+                            <Confirmation />
                          }
                          <OrderSummary
                              cartSubtotal={subtotal}
                              checkoutStatus={checkoutStatus}
-                             userShoppingCart={userShoppingCart}
+                             userShoppingCart={cart}
                              shippingCost={shippingCost}
                           />
                           {( showCart ) && 
@@ -272,7 +383,7 @@ class Checkout extends React.Component {
                                 value='Checkout'
                                 onClick={this.goToShippingScreen}
                                 disabled={
-                                    (!userShoppingCart.length)
+                                    (!cart.length)
                                     ? true
                                     : false 
                                     }
@@ -284,6 +395,14 @@ class Checkout extends React.Component {
                                 type="submit"
                                 value='Checkout'
                                 onClick={this.checkShipping}
+                            />
+                            }
+                            { ( showPayment ) && 
+                            <InputBase 
+                                className={s.checkoutBtn}
+                                type="submit"
+                                value='Checkout'
+                                onClick={this.checkPayment}
                             />
                             }
                     </div>

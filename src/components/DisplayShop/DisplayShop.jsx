@@ -7,24 +7,13 @@ class DisplayShop extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            cart: {}
         }
     }
 
-    // Maybe try this later
-    // addToCart = () => {
-        // find item in array of items. pass that to codeCommerce
-        // code commerce can then pass that data to checkout/cart
-    //     this.setState((prevState) => ({
-    //         cart: {
-    //             ...prevState.cart,
-    //             // newItem
-    //         } 
-    //     }))
-    //     // set state prevState
-    //     // cart: [...prevState.cart, newItem]
-    //     console.log('add');
-    // }
+    addToCart = ({target: {value}}) => {
+        let addItem = items.find((item) => item.name === value);
+        this.props.updateShoppingCart(addItem)
+    }
 
     render() {
 
@@ -38,7 +27,7 @@ class DisplayShop extends React.Component {
                         name={item.name}
                         img={item.image}
                         price={item.price}
-                    // addItemToCart={this.addToCart}
+                        addToCart={this.addToCart}
                     />
                 ))}
                 </div>

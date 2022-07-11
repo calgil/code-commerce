@@ -1,0 +1,32 @@
+.confirmationContainer {
+    width: 100%;
+    padding: 0 40px;
+    color: #333;
+    background-color: #eee;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.confirmationContainer h3 {
+    text-align: left;
+}
+
+.thumbsUp {
+    font-size: 100px;
+    color: green;
+    margin-top: 50px;
+}
+
+.success {
+    font-size: 25px;
+    line-height: 1.6;
+}
+
+.confirmBtn input[type="submit"] {
+    width: 200px;
+    margin: 0 auto;
+    outline: none;
+    border: 1px solid #333;
+    border-radius: 50px;
+    padding: 15px;
+}
