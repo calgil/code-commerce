@@ -1,0 +1,20 @@
+.itemContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.name { margin: 0; }
+
+.thumbnailImg {
+    width: 90px;
+}
+
+.info {
+    display: flex;
+    align-items: center;
+}
+
+.price {
+    margin-left: 40px;
+}

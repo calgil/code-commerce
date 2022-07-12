@@ -47,5 +47,7 @@
         width: 100%;
         padding: 20px;
         margin-top: 2rem;
+        overflow-y: initial;
+        margin-top: 300px;
     }
 }

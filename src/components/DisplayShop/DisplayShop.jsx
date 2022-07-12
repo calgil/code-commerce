@@ -11,16 +11,20 @@ class DisplayShop extends React.Component {
     }
 
     addToCart = ({target: {value}}) => {
+        let newItem = {}
         let addItem = items.find((item) => item.name === value);
-        this.props.updateShoppingCart(addItem)
+        for(let key in addItem) {
+            newItem[key] = addItem[key];
+        }
+        console.log('add', newItem);
+        this.props.updateShoppingCart(newItem);
     }
 
     render() {
 
         return (
-            <div>
-                <h3 className={s.containerHeader}>Shop Our Gear</h3>
                 <div className={s.shopContainer}>
+                    <h3 className={s.containerHeader}>Shop Our Gear</h3>
                 {items.map((item) => (
                     <ShopItem 
                         key={item.name}
@@ -31,7 +35,6 @@ class DisplayShop extends React.Component {
                     />
                 ))}
                 </div>
-            </div>
         )
     }
 

@@ -18,7 +18,7 @@ import {
     cardExpireValidation,
     securityCodeValidation,
  } from "../../utilities/validations";
-
+import Header from "../Header/Header";
 
 class Checkout extends React.Component {
     constructor(props){
@@ -32,7 +32,7 @@ class Checkout extends React.Component {
             },
             subtotal: 0,
             shippingCost: '',
-            userShoppingCart: this.props.cart,
+            cart: [],
             shippingData: SHIPPING_DATA,
             shippingError: {},
             disableButton: '',
@@ -49,35 +49,37 @@ class Checkout extends React.Component {
         this.setState({ subtotal: newSubtotal })
     }
 
-    calcSubtotal = () => {
-        const { userShoppingCart } = this.state;
-        const subtotal = userShoppingCart.reduce((acc, obj) => {
+    calcSubtotal = (cart) => {
+        const subtotal = cart.reduce((acc, obj) => {
             return acc + (obj.quantity * obj.price)
         }, 0);
         this.updateSubtotalState(subtotal);
     }
 
     updateQuantity = (name, value) => {
-        // needs work remove button not working
-        // if(value > 0) {
-            this.setState((prevState) => ({
-                userShoppingCart: prevState.userShoppingCart.map((item) => (
-                    item.name === name 
-                    ? Object.assign(item, {quantity: value})
-                    : item
-                ))
-            }), this.calcSubtotal);
-        // } 
-        // else {
-        //     this.setState((prevState) => ({
-        //         userShoppingCart: [prevState.userShoppingCart.filter((item) => item.name !== name)]
-        //     }), this.calcSubtotal);
-        // }
-        
+        const { cart } = this.props;
+        if(value > 0) {
+            cart.map((item) => (
+                item.name === name 
+                ? Object.assign(item, {quantity: value})
+                : item
+            ))
+            this.props.updateCart(cart);
+            this.calcSubtotal(cart);
+        } 
+        else {
+            let updatedCart = cart.filter((item) => item.name !== name);
+            this.calcSubtotal(updatedCart);
+            this.props.updateCart(updatedCart);
+        }
     }
 
     componentDidMount() {
-        this.calcSubtotal();
+        this.calcSubtotal(this.props.cart);
+    }
+
+    static getDerivedStateFromProps(props) {
+        return { cart: props.cart }
     }
 
     resetScreenState = () => {
@@ -317,7 +319,6 @@ class Checkout extends React.Component {
 
     render(){
         const { 
-            // userShoppingCart, 
             subtotal, 
             checkoutStatus, 
             shippingCost,
@@ -331,18 +332,21 @@ class Checkout extends React.Component {
         const { cart } = this.props;
         return (
             <div className={s.checkoutBg}>
-                <div>
                     <div className={s.close}>
                         <FontAwesomeIcon 
                             icon={faXmark}
                             onClick={this.props.checkoutVisibility}
                         />
                     </div>
+                    <Header 
+                        toggleShowSignIn={this.props.toggleShowSignIn}
+                        cartCount={cart.length}
+                        handleCartClick={this.props.handleCartClick}
+                    />
                      <CheckoutStatus
                          checkoutStatus={checkoutStatus}
                      />
                     <div className={s.checkoutBody}>
-                        {/* Add a message if the cart is empty */}
                          {  ( showCart ) &&
                          <Cart 
                              shoppingCartItems={cart}
@@ -375,6 +379,7 @@ class Checkout extends React.Component {
                              checkoutStatus={checkoutStatus}
                              userShoppingCart={cart}
                              shippingCost={shippingCost}
+                             shippingData={shippingData}
                           />
                           {( showCart ) && 
                             <InputBase 
@@ -406,7 +411,6 @@ class Checkout extends React.Component {
                             />
                             }
                     </div>
-                </div>
             </div>
         )
     }

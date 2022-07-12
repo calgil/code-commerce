@@ -45,13 +45,13 @@ export const USER_DATA = {
 }
 
 export const SHIPPING_DATA = {
-    title: '',
-    name: '',
-    address: '',
-    phone: '',
-    city: '',
-    state: '',
-    postcode: '',
+    title: 'title',
+    name: 'name',
+    address: '123 address road',
+    phone: '1234561289',
+    city: 'city',
+    state: 'state',
+    postcode: '12345',
     country: '',
 }
 

@@ -14,6 +14,7 @@
     max-width: 1000px;
     margin: 0 auto;
     padding: 0 40px;
+    max-height: 75px;
 }
 
 .gear a {
@@ -21,9 +22,15 @@
     color: #eee;
 }
 
+.links {
+    display: flex;
+    align-items: center;
+}
+
 .login, .cart { 
     cursor: pointer;
     transition: all 200ms;
+    font-size: 20px;
  }
 
 .login:hover, .cart:hover { color: #333;}
@@ -34,4 +41,24 @@
     background-color: transparent;
     color: #eee;
     font-size: 1rem;
+}
+
+.cart {
+    position: relative;
+}
+
+.cartCount {
+    position: absolute;
+    top: 10px;
+    z-index: 50;
+    padding: 10px;
+    background-color: red;
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    display: flex;
+    align-items: center;
+    margin-left: 12px;
+    font-weight: 700;
+    cursor: pointer;
 }

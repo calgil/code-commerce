@@ -55,14 +55,14 @@ button.removeBtn {
     }
 
     .imgContainer {
-        max-width: 150px;
+        max-width: 80px;
     }
 }
 
 @media only screen and (max-width: 560px) {
-    .imgContainer {
+    /* .imgContainer {
         max-width: 80px;
-    }
+    } */
 
     .itemInfo div {
         width: 50px;

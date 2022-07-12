@@ -20,6 +20,11 @@
     color: #eee;
 }
 
+.itemCount {
+    display: block;
+    margin-bottom: 20px;
+}
+
 
 .total {
     width: 100%;

@@ -25,16 +25,25 @@ img {
     font-size: 12px;
  }
 
-.addToCart {
-    border: none;
+.add {
+    /* border: none;
     margin-bottom: 0.5rem;
     line-height: 1.75;
     cursor: pointer;
     background-color: #fff;
     border-radius: 5px;
-    transition: all 300ms;
+    transition: all 300ms; */
+    margin-bottom: 20px;
+    border: 1px solid #333;
+    padding: 5px 10px;
+    border-radius: 50px;
+    font-size: 15px;
+    background-color: #eee;
+    color: #333;
+    transition: all 200ms;
 }
 
-.addToCart:hover {
-    background-color: #D4D4D4DE;
+.add:hover {
+    background-color: #333;
+    color: #eee;
 }

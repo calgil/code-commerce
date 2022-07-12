@@ -19,6 +19,8 @@ class CodeCommerce extends React.Component {
     updateShoppingCart = (newItem) => {
         const {userShoppingCart} = this.state;
         if (!userShoppingCart.includes(newItem)) {
+            // remove from cart not working as expected
+            // refactor to allow multiple clicks from displayShop to update quantity correctly
             newItem.quantity += 1
             this.setState((prevState) => ({
                 userShoppingCart: [...prevState.userShoppingCart, newItem]
@@ -32,6 +34,10 @@ class CodeCommerce extends React.Component {
                 ))
             }));
         }
+    }
+
+    updateCart = (shoppingCart) => {
+        this.setState({userShoppingCart: [...shoppingCart]})
     }
 
     updateLogin = () => {
@@ -57,14 +63,17 @@ class CodeCommerce extends React.Component {
         const { showSignIn, showCheckout, loggedIn, userShoppingCart} = this.state;
         return (
             <div className={s.main}>
-                <div className={s.hero}>
-                    {/* Need to pass userShoppingCart.length as props */}
+                { !showCheckout && 
+                    <div className={s.hero}>
+                    </div>
+                }
+                { !showCheckout &&
                     < Header 
                         toggleShowSignIn={this.toggleShowSignIn}
+                        cartCount={userShoppingCart.length}
                         handleCartClick={this.handleCartClick}
-                        // cartLength={}
                     />
-                </div>
+                }
                 {(showSignIn) && 
                 <SignIn 
                     changeLoginStatus={this.updateLogin}
@@ -80,6 +89,7 @@ class CodeCommerce extends React.Component {
                         checkoutVisibility={this.handleCartClick}
                         loggedIn={loggedIn}
                         toggleShowSignIn={this.toggleShowSignIn} 
+                        updateCart={this.updateCart}
                         cart={userShoppingCart}
                     /> }
             </div>

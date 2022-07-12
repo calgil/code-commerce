@@ -12,8 +12,8 @@
 
 .close {
     width: 50px;
+    margin-top: 80px;
     margin-left: auto;
-    margin-top: 90px;
     cursor: pointer;
     font-size: 30px;
     color: #333;
@@ -27,9 +27,9 @@
 
 .checkoutBody {
     width: 100%;
+    height: 100%;
     display: flex;
     gap: 20px;
-    height: 70vh;
     padding-bottom: 20px;
 }
 
@@ -63,7 +63,11 @@ h3 { color: #333;}
     .checkoutBody {
         flex-direction: column;
         padding: 40px;
-        justify-content: center;
         align-items: center;
+    }
+
+    .checkoutBtn {
+        right: 50%;
+        left: 50%;
     }
 }

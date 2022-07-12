@@ -8,17 +8,27 @@ const Header = ({ ...props }) => (
             <header className={s.header}>
                 <h1 className={s.gear}><a href="./">Gear Shop</a></h1>
                 <div className={s.links}>
-                    <input 
-                        className={s.login} 
-                        type="button" 
-                        value={'Login'}
-                        onClick={props.toggleShowSignIn}
-                     />
-                     <FontAwesomeIcon
-                        className={s.cart}
-                        icon={faCartShopping}
+                    <div>
+                        <input 
+                            className={s.login} 
+                            type="button" 
+                            value={'Login'}
+                            onClick={props.toggleShowSignIn}
+                         />
+                    </div>
+                    <div
                         onClick={props.handleCartClick}
-                    />
+                    >
+                        <FontAwesomeIcon
+                            className={s.cart}
+                            icon={faCartShopping}
+                            // onClick={props.handleCartClick}
+                         />
+                         { props.cartCount
+                            ? <span className={s.cartCount}>{props.cartCount}</span>
+                            : ''
+                         }
+                    </div>
                 </div>
             </header>
         </div>
