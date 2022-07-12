@@ -44,14 +44,19 @@ export const USER_DATA = {
     postCode: '',
 }
 
-export const SHIPPING_DATA = {
-    title: 'title',
-    name: 'name',
-    address: '123 address road',
-    phone: '1234561289',
-    city: 'city',
-    state: 'state',
-    postcode: '12345',
+export const FAKE_USER = {
+    email: 'person@email.com',
+    password: 'Aaaaaaaa1!',
+}
+
+export const INIT_SHIPPING_DATA = {
+    title: '',
+    name: '',
+    address: '',
+    phone: '',
+    city: '',
+    state: '',
+    postcode: '',
     country: '',
 }
 

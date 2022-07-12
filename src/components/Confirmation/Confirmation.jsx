@@ -27,8 +27,8 @@ const Confirmation = ({...props}) => (
             type="submit"
             value='Back to Home Page'
             className={`${s.confirmBtn} ${s.backToHome}`}
+            onClick={props.reset}
         />
-        {/* Back home button setState showCheckout False */}
     </div>
 )
 

@@ -1,7 +1,7 @@
 import React from "react";
-import CartItem from "../CartItem/CartItem";
 import SummaryItem from "../SummaryItem/SummaryItem";
 import s from './OrderSummary.module.css';
+import { CARDICON } from "../../utilities/constants";
 
 class OrderSummary extends React.Component {
     constructor(props) {
@@ -16,11 +16,11 @@ class OrderSummary extends React.Component {
             userShoppingCart, 
             shippingCost, 
             checkoutStatus, 
-            shippingData 
+            shippingData,
+            cardData,
         } = this.props;
 
         const { 
-            showCart, 
             showShipping, 
             showPayment, 
             showConfirmation 
@@ -45,38 +45,54 @@ class OrderSummary extends React.Component {
                                     quantity={item.quantity}
                                 />
                             ))}
+                            <hr />
                         </div>
                     }
                     { (showPayment || showConfirmation) &&
                             <div className={s.shippingInfoContainer}>
-                                <span className={s.shipInfo}>{shippingData.name}</span>
-                                <span className={s.shipInfo}>{shippingData.address}</span>
-                                <span className={s.shipInfo}>{shippingData.postcode}</span>
-                                <span className={s.shipInfo}>{shippingData.city}</span>
-
+                                <p>Shipping</p>
+                                <p className={s.shipInfo}>{shippingData.name}</p>
+                                <p className={s.shipInfo}>{shippingData.address}</p>
+                                <p className={s.shipInfo}>{shippingData.postcode}</p>
+                                <p className={s.shipInfo}>{shippingData.city}</p>
+                                <hr />
                             </div>
 
                     }
-                    <div className={s.info}>
-                        <p><span>Subtotal:</span>{
-                            (cartSubtotal === isNaN(cartSubtotal)) 
-                            ? '' 
-                            : <span className={s.subtotal}> ${Number(cartSubtotal).toFixed(2)} </span>
-                        }</p>
-                        <p><span>Shipping & Handling:</span>{
-                            (shippingCost === '')
-                            ? <span className={s.shipping}>{'--'}</span>
-                            : <span className={s.shipping}>${shippingCost.toFixed(2)}</span>
-                        }</p>
-                    </div>
-                    <div className={s.total}>
-                        <hr />
-                        <p className={s.cartTotal}>
-                            <span>Cart Total:</span>
-                            <span className={s.cartTotal}>${Number(cartSubtotal + shippingCost).toFixed(2)}</span>
-                        </p>
-
-                    </div>
+                    { showConfirmation && 
+                            <div>
+                                <p className={s.paymentHeader}>Payment</p>
+                                <div className={s.paymentInfoContainer}>
+                                    <div className={s.cardWrapper}>
+                                        <img src={CARDICON[cardData.cardType]} alt="card" />
+                                    </div>
+                                    <span>Ending in: {cardData.cardNumber.slice(-4)}</span>
+                                    <span>Total Payment: {Number(cartSubtotal + shippingCost).toFixed(2)}</span>
+                                </div>
+                            </div>
+                    }
+                    { !showConfirmation &&
+                        <div className={s.info}>
+                            <p><span>Subtotal:</span>{
+                                (cartSubtotal === isNaN(cartSubtotal)) 
+                                ? '' 
+                                : <span className={s.subtotal}> ${Number(cartSubtotal).toFixed(2)} </span>
+                            }</p>
+                            <p><span>Shipping & Handling:</span>{
+                                (shippingCost === '')
+                                ? <span className={s.shipping}>{'--'}</span>
+                                : <span className={s.shipping}>${shippingCost.toFixed(2)}</span>
+                            }</p>
+                            <div className={s.total}>
+                                <hr />
+                                <p className={s.cartTotal}>
+                                    <span>Cart Total:</span>
+                                    <span className={s.cartTotal}>${Number(cartSubtotal + shippingCost).toFixed(2)}</span>
+                                </p>
+                            </div>
+                        </div>
+                    }
+                    
                 </div>
             </div>
         )

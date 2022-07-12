@@ -2,6 +2,7 @@ import React from "react";
 import s from './Checkout.module.css';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Header from "../Header/Header";
 import CheckoutStatus from "../CheckoutStatus/CheckoutStatus";
 import Cart from "../Cart/Cart";
 import OrderSummary from "../OrderSummary/OrderSummary";
@@ -9,7 +10,7 @@ import Shipping from "../Shipping/Shipping";
 import Payment from "../Payment/Payment";
 import Confirmation from "../Confirmation/Confirmation";
 import InputBase from "../InputBase/InputBase";
-import { SHIPPING_DATA, INIT_CARD_DATA } from "../../utilities/constants";
+import { INIT_SHIPPING_DATA, INIT_CARD_DATA } from "../../utilities/constants";
 import { 
     onlyTextValidation,
     phoneValidation,
@@ -18,7 +19,6 @@ import {
     cardExpireValidation,
     securityCodeValidation,
  } from "../../utilities/validations";
-import Header from "../Header/Header";
 
 class Checkout extends React.Component {
     constructor(props){
@@ -33,7 +33,7 @@ class Checkout extends React.Component {
             subtotal: 0,
             shippingCost: '',
             cart: [],
-            shippingData: SHIPPING_DATA,
+            shippingData: INIT_SHIPPING_DATA,
             shippingError: {},
             disableButton: '',
             cardData: INIT_CARD_DATA,
@@ -69,8 +69,8 @@ class Checkout extends React.Component {
         } 
         else {
             let updatedCart = cart.filter((item) => item.name !== name);
+            this.props.updateCart(updatedCart);   
             this.calcSubtotal(updatedCart);
-            this.props.updateCart(updatedCart);
         }
     }
 
@@ -175,35 +175,7 @@ class Checkout extends React.Component {
         }
     }
 
-    // checkError = (data, error) => {
-    //     console.log( error);
-    //     // I think I can refactor this function with sign in and billing validation ?
-    //     // const { shippingData, shippingError } = this.state;
-    //     let errorValue = {};
-    //     let isError = false;
-        
-    //     Object.keys(data).forEach((val) => {
-    //         if(!data[val].length) {
-    //             errorValue = { ...errorValue, [`${val}Error`]: 'Required'}
-    //             isError = true;
-    //         }
-    //     })
-    //     this.setState({ error: errorValue })
-    //     Object.keys(error).forEach((val) => {
-    //         if(error[val]) {
-    //             isError = true;
-    //         }
-    //     })
-    //     Object.keys(data).forEach((val) => {
-    //         if(data[val].length) {
-    //             this.handleShippingValidations(val, data[val]);
-    //         }
-    //     })
-    //     return isError;
-    // }
-
     checkShippingError = () => {
-        // I think I can refactor this function with sign in and billing validation ?
         const { shippingData, shippingError } = this.state;
         let errorValue = {};
         let isError = false;
@@ -283,8 +255,6 @@ class Checkout extends React.Component {
         }
     }
 
-    // ahhh!! this sucks! 
-
     checkPaymentError = () => {
         const { cardData, cardError } = this.state;
         let errorValue = {};
@@ -317,6 +287,15 @@ class Checkout extends React.Component {
         }
     }
 
+    resetData = () => {
+        this.setState({
+            shippingData: INIT_SHIPPING_DATA,
+            cardData: INIT_CARD_DATA,
+        });
+        this.props.updateCart([]);
+        this.props.toggleShowCheckout();
+    }
+
     render(){
         const { 
             subtotal, 
@@ -335,13 +314,13 @@ class Checkout extends React.Component {
                     <div className={s.close}>
                         <FontAwesomeIcon 
                             icon={faXmark}
-                            onClick={this.props.checkoutVisibility}
+                            onClick={this.props.toggleShowCheckout}
                         />
                     </div>
                     <Header 
                         toggleShowSignIn={this.props.toggleShowSignIn}
                         cartCount={cart.length}
-                        handleCartClick={this.props.handleCartClick}
+                        handleCartClick={this.props.toggleShowCheckout}
                     />
                      <CheckoutStatus
                          checkoutStatus={checkoutStatus}
@@ -372,7 +351,9 @@ class Checkout extends React.Component {
                          />
                          }
                          { ( showConfirmation ) &&
-                            <Confirmation />
+                            <Confirmation 
+                                reset={this.resetData}
+                            />
                          }
                          <OrderSummary
                              cartSubtotal={subtotal}
@@ -380,35 +361,42 @@ class Checkout extends React.Component {
                              userShoppingCart={cart}
                              shippingCost={shippingCost}
                              shippingData={shippingData}
+                             cardData={cardData}
                           />
                           {( showCart ) && 
-                            <InputBase 
-                                className={s.checkoutBtn}
-                                type="submit"
-                                value='Checkout'
-                                onClick={this.goToShippingScreen}
-                                disabled={
-                                    (!cart.length)
-                                    ? true
-                                    : false 
-                                    }
-                            />
+                            <div className={s.btnContainer}>
+                                <InputBase 
+                                    className={s.checkoutBtn}
+                                    type="submit"
+                                    value='Checkout'
+                                    onClick={this.goToShippingScreen}
+                                    disabled={
+                                        (!cart.length)
+                                        ? true
+                                        : false 
+                                        }
+                                />
+                            </div>
                           }
                           { ( showShipping ) && 
-                            <InputBase 
-                                className={s.checkoutBtn}
-                                type="submit"
-                                value='Checkout'
-                                onClick={this.checkShipping}
-                            />
+                            <div className={s.btnContainer}>
+                                <InputBase 
+                                    className={s.checkoutBtn}
+                                    type="submit"
+                                    value='Checkout'
+                                    onClick={this.checkShipping}
+                                />
+                            </div>
                             }
                             { ( showPayment ) && 
-                            <InputBase 
-                                className={s.checkoutBtn}
-                                type="submit"
-                                value='Checkout'
-                                onClick={this.checkPayment}
+                            <div className={s.btnContainer}>
+                                <InputBase 
+                                    className={s.checkoutBtn}
+                                    type="submit"
+                                    value='Checkout'
+                                    onClick={this.checkPayment}
                             />
+                            </div>
                             }
                     </div>
             </div>

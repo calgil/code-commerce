@@ -16,12 +16,10 @@ class DisplayShop extends React.Component {
         for(let key in addItem) {
             newItem[key] = addItem[key];
         }
-        console.log('add', newItem);
         this.props.updateShoppingCart(newItem);
     }
 
     render() {
-
         return (
                 <div className={s.shopContainer}>
                     <h3 className={s.containerHeader}>Shop Our Gear</h3>
@@ -37,7 +35,6 @@ class DisplayShop extends React.Component {
                 </div>
         )
     }
-
 }
 
 export default DisplayShop;

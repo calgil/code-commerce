@@ -2,7 +2,7 @@ import React from "react";
 import s  from './SignIn.module.css';
 import RadioBase from "../RadioBase/RadioBase";
 import InputBase from "../InputBase/InputBase";
-import { USER_DATA } from "../../utilities/constants";
+import { USER_DATA, FAKE_USER } from "../../utilities/constants";
 import { 
     emailValidation, 
     passwordValidation, 
@@ -105,23 +105,27 @@ class SignIn extends React.Component {
         const { user, error, } = this.state;
         let errorValue = {};
         let isError = false;
-        Object.keys(user).forEach((val) => {
-            if(((val === 'email') || (val === 'password')) && !user[`${val}`].length) {
-                errorValue = {...errorValue, [`${val}Error`]: "Required"}
-                isError = true;
-            }
-        })
-        this.setState({ error: errorValue });
-        Object.keys(error).forEach((val) => {
-            if(error[val]){
-                isError = true;
-            }
-        })
-        Object.keys(user).forEach((val) => {
-            if(((val === 'email') || (val === 'password')) && user[`${val}`].length) {
-                this.handleValidation(val, user[val]);
-            }
-        })
+        if (user === FAKE_USER) {
+            console.log('good');
+        } else {
+            Object.keys(user).forEach((val) => {
+                if(((val === 'email') || (val === 'password')) && !user[`${val}`].length) {
+                    errorValue = {...errorValue, [`${val}Error`]: "Required"}
+                    isError = true;
+                }
+            })
+            this.setState({ error: errorValue });
+            Object.keys(error).forEach((val) => {
+                if(error[val]){
+                    isError = true;
+                }
+            })
+            Object.keys(user).forEach((val) => {
+                if(((val === 'email') || (val === 'password')) && user[`${val}`].length) {
+                    this.handleValidation(val, user[val]);
+                }
+            })
+        }
         return isError;
     }
 

@@ -8,7 +8,7 @@ class Payment extends React.Component {
         super(props);
         this.state = {
             maxLength: OTHERCARDS.length,
-            cardType: null,
+            // cardType: null,
         }
     }
 
@@ -27,7 +27,9 @@ class Payment extends React.Component {
 
     handleBlur = ({ target: { name, value } }) => {
         if (name === 'cardNumber') {
-            this.setState({ cardType: this.findCardType(value) })
+            let cardType = this.findCardType(value);
+            this.props.updateData('cardData', 'cardType', cardType);
+            // this.setState({ cardType: cardType })
             this.props.handleCardValidations(name, value);
         } else {
             this.props.handleCardValidations(name, value);
@@ -52,8 +54,8 @@ class Payment extends React.Component {
     }
 
     render(){
-        const { goToShippingScreen, cardData, cardError } = this.props;
-        const { maxLength, cardType } = this.state;
+        const { goToShippingScreen, cardData, cardError, cardType, } = this.props;
+        const { maxLength, } = this.state;
 
         const paymentInputs = [
             {name: 'cardHolderName', labelText: 'Card Holder Name *', type: 'text', error: 'cardHolderNameError' },

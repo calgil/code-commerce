@@ -16,24 +16,26 @@ class CodeCommerce extends React.Component {
         }
     }
 
+    addItemToCart = (newItem) => {
+        console.log('add');
+        newItem.quantity += 1
+        this.setState((prevState) => ({
+            userShoppingCart: [...prevState.userShoppingCart, newItem]
+        }))
+    }
+
+    changeQuantity = (newItem, cart) => {
+        let updatedItem = cart.find(item => item.name === newItem.name)
+        updatedItem.quantity++
+        console.log('change', updatedItem);
+    }
+
     updateShoppingCart = (newItem) => {
         const {userShoppingCart} = this.state;
-        if (!userShoppingCart.includes(newItem)) {
-            // remove from cart not working as expected
-            // refactor to allow multiple clicks from displayShop to update quantity correctly
-            newItem.quantity += 1
-            this.setState((prevState) => ({
-                userShoppingCart: [...prevState.userShoppingCart, newItem]
-            }))
-        } else {
-            this.setState((prevState) => ({
-                userShoppingCart: prevState.userShoppingCart.map((item) => (
-                    item.name === newItem.name 
-                    ? Object.assign(item, {quantity: item.quantity += 1})
-                    : item
-                ))
-            }));
-        }
+        let found = userShoppingCart.find(item => item.name === newItem.name);
+        found === undefined
+        ? this.addItemToCart(newItem)
+        : this.changeQuantity(newItem, userShoppingCart)
     }
 
     updateCart = (shoppingCart) => {
@@ -53,7 +55,7 @@ class CodeCommerce extends React.Component {
         });
     };
 
-    handleCartClick = () => {
+    toggleShowCheckout = () => {
         this.setState({
             showCheckout: !this.state.showCheckout,
         });
@@ -71,7 +73,7 @@ class CodeCommerce extends React.Component {
                     < Header 
                         toggleShowSignIn={this.toggleShowSignIn}
                         cartCount={userShoppingCart.length}
-                        handleCartClick={this.handleCartClick}
+                        handleCartClick={this.toggleShowCheckout}
                     />
                 }
                 {(showSignIn) && 
@@ -86,7 +88,7 @@ class CodeCommerce extends React.Component {
                 }
                 { showCheckout && 
                     <Checkout
-                        checkoutVisibility={this.handleCartClick}
+                        toggleShowCheckout={this.toggleShowCheckout}
                         loggedIn={loggedIn}
                         toggleShowSignIn={this.toggleShowSignIn} 
                         updateCart={this.updateCart}

@@ -31,20 +31,26 @@
     display: flex;
     gap: 20px;
     padding-bottom: 20px;
+    position: relative;
 }
 
 h3 { color: #333;}
 
+.btnContainer {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    z-index: 100;
+}
+
 .checkoutBtn {
     background-color: red;
-    /* outline: none;
-    border: none; */
     border-radius: 50px;
     padding: 5px 10px;
     width: 150px;
-    position: absolute;
-    bottom: 20px;
-    right: 150px;
+    margin-left: auto;
+    margin-right: 120px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -65,9 +71,12 @@ h3 { color: #333;}
         padding: 40px;
         align-items: center;
     }
+    .btnContainer {
+        position: relative;
+        margin-top: -40px;
+    }
 
     .checkoutBtn {
-        right: 50%;
-        left: 50%;
+        margin: 0 auto;
     }
 }
