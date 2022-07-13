@@ -25,9 +25,9 @@ class Checkout extends React.Component {
         super(props);
         this.state = {
             checkoutStatus: {
-                showCart: false, 
+                showCart: true, 
                 showShipping: false, 
-                showPayment: true,
+                showPayment: false,
                 showConfirmation: false,
             },
             subtotal: 0,
