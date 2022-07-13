@@ -1,13 +1,9 @@
 .checkoutBg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
     background-color: #fff;
     overflow-y: scroll;
-    z-index: 20;
+    height: 100vh;
     padding: 0 15px;
+    padding-bottom: 50px;
 }
 
 .close {
@@ -45,9 +41,6 @@ h3 { color: #333;}
 }
 
 .checkoutBtn {
-    background-color: red;
-    border-radius: 50px;
-    padding: 5px 10px;
     width: 150px;
     margin-left: auto;
     margin-right: 120px;
@@ -56,23 +49,34 @@ h3 { color: #333;}
     justify-content: center;
 }
 
-.checkoutBtn input {
-    background-color: transparent;
+.checkoutBtn input[type="submit"] {
     color: #eee;
     font-size: 16px;
     font-weight: 600;
     outline: none;
     border: none;
+    background-color: red;
+    border-radius: 50px;
+    padding: 10px 15px;
+    width: 100%;
+}
+
+.checkoutBtn input[type="submit"]:focus, 
+.checkoutBtn input[type="submit"]:hover {
+    border: 2px solid #eee;
 }
 
 @media only screen and (max-width: 900px) {
     .checkoutBody {
         flex-direction: column;
-        padding: 40px;
+        padding: 10px 40px;
         align-items: center;
+        margin-bottom: 50px;
+        height: auto;
     }
     .btnContainer {
         position: relative;
+        bottom: -30px;
         margin-top: -40px;
     }
 

@@ -5,6 +5,7 @@
     background-color: #eee;
     border-radius: 10px;
     overflow-y: scroll;
+    box-shadow: -17px 20px 5px 0px rgba(179, 179, 179, 0.7);
 }
 
 .title { 

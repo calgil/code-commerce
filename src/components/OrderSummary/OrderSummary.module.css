@@ -10,6 +10,7 @@
     overflow-y: scroll;
     display: flex;
     flex-direction: column;
+    box-shadow: -17px 20px 5px 0px rgba(179, 179, 179, 0.7);
 }
 
 .title {
@@ -73,5 +74,9 @@
     .summary input {
         max-width: 250px;
         margin: 0 auto;
+    }
+
+    .paymentInfoContainer{
+        justify-content: space-around;
     }
 }

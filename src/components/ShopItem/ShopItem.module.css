@@ -8,6 +8,7 @@
     background-color: #eee;
     color: #333;
     border-radius: 10px;
+    box-shadow: -17px 20px 5px 0px rgba(0,0,0,0.75);
 }
 
 /* .imgContainer { border-radius: 10px; } */

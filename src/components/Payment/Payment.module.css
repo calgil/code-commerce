@@ -5,6 +5,7 @@
     margin: 20px;
     background-color: #eee;
     border-radius: 10px;
+    box-shadow: -17px 20px 5px 0px rgba(179, 179, 179, 0.7);
 }
 
 .paymentContainer input {
@@ -21,7 +22,7 @@
     font-weight: 500;
     font-size: 14px;
     outline: none;
-    background-color: #eee;
+    background-color: transparent;
     border: 1px solid #333;
     border-radius: 5px;
     margin-top: 15px;
@@ -30,6 +31,7 @@
 }
 
 .back:hover, .back:focus {
+    background-color: #fff;
     padding: 0.5rem;
 }
 

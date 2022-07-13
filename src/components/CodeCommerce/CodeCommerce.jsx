@@ -17,7 +17,6 @@ class CodeCommerce extends React.Component {
     }
 
     addItemToCart = (newItem) => {
-        console.log('add');
         newItem.quantity += 1
         this.setState((prevState) => ({
             userShoppingCart: [...prevState.userShoppingCart, newItem]
@@ -27,7 +26,6 @@ class CodeCommerce extends React.Component {
     changeQuantity = (newItem, cart) => {
         let updatedItem = cart.find(item => item.name === newItem.name)
         updatedItem.quantity++
-        console.log('change', updatedItem);
     }
 
     updateShoppingCart = (newItem) => {
