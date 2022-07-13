@@ -24,6 +24,7 @@ class InputBase extends React.Component {
             <div className={s.inputContainer}>
              <label className={className}>
             {labelText}
+            {error && <div className={s.error}>{error}</div>} 
                 <input className={s.input} type={(type === 'password' && showPassword) ? 'text' : type} {...props} />
                     {(labelText === 'Password *' ||  
                     labelText === 'Confirm Password *')
@@ -33,7 +34,6 @@ class InputBase extends React.Component {
                         icon={showPassword  ? faEye : faEyeSlash }
                         onClick={this.passwordVisible} 
                     />}
-                    {error && <div className={s.error}>{error}</div>} 
                     {(!error || !error.cardNumberError) && (props.name === 'cardNumber') && CARD.includes(cardType) && (
                         <img 
                             style={{

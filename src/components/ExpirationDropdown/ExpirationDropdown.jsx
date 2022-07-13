@@ -1,33 +1,19 @@
 import React from "react";
-import s from "./ExpirationDropdown.module.css"
-import {months, years} from "../../utilities/constants";
 
 const ExpirationDropdown = ({ ...props }) => (
-    <div className={s.expirationContainer}>
-        <p>Expiration Date</p>
+    <div>
         <select 
-            name="month" 
-            className={s.expirationDropdown}
+            name={props.name} 
             onChange={props.onChange}
+            onBlur={props.onBlur}
             required
         >
-            { months.map((month, i) => (
-                <option value={i}>{month}</option>
+            { props.data.map((item, i) => (
+                <option key={i} value={item.value}>{item.name}</option>
             ))
             }
         </select>
-        <select 
-            name="year" 
-            className={s.expirationDropdown}
-            onChange={props.onChange}
-            required
-        >
-            { years.map((year) => (
-                <option value={year}>{year}</option>
-            ))
-
-            }
-        </select>
+        {props.error && <div>{props.error}</div>}
     </div>
 )
 

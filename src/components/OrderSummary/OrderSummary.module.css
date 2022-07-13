@@ -13,6 +13,37 @@
     box-shadow: -17px 20px 5px 0px rgba(179, 179, 179, 0.7);
 }
 
+.promoCode {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.promoCode input[type="text"] {
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.promoCode input[type="text"]:focus {
+    outline: none;
+}
+
+.promoCode input[type="submit"] {
+    width: 100px;
+    padding: 8px 10px;
+}
+
+.promoCode input[type="submit"]:hover,
+.promoCode input[type="submit"]:focus {
+    border: 1px solid green;
+    padding: 10px;
+}
+
+.success { 
+    margin-top: 0;
+    color: green;
+ }
+
 .title {
     text-align: right;
     padding-right: 20px;

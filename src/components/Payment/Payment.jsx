@@ -1,7 +1,7 @@
 import React from "react";
 import s from './Payment.module.css';
 import InputBase from "../InputBase/InputBase";
-import { OTHERCARDS } from "../../utilities/constants";
+import { OTHERCARDS, months, years } from "../../utilities/constants";
 import ExpirationDropdown from "../ExpirationDropdown/ExpirationDropdown";
 
 class Payment extends React.Component {
@@ -9,8 +9,7 @@ class Payment extends React.Component {
         super(props);
         this.state = {
             maxLength: OTHERCARDS.length,
-            // might put expiration date up here
-            // cardType: null,
+            expiration: '',
         }
     }
 
@@ -54,22 +53,25 @@ class Payment extends React.Component {
         }
     }
 
-    handleExpiration = ({ target: { name, value } }) => {
-        let dateObj = {month: '', year: ''}
-        if (name === 'month') {
-            dateObj.month = value
+    updateCardExpiration = () => {
+        const { month, year } = this.state.expiration;
+        if(month && year) {
+            let value = `${month}/${year}`;
+            this.props.updateData('cardData', 'cardExpiration', value);
         } else {
-            dateObj.year = value
+            this.props.updateData('cardData', 'cardExpiration', '');
         }
-        // needs work
-        if(dateObj.name !== '' 
-            && dateObj.year !== '') {
-            let string = (dateObj.name + dateObj.year)
-            console.log(string);
-        }
-        // this.props.updateData('cardData', 'cardExpiration', (dateObj.month + dateObj.year))
-        // I want to take in the month/year and make a string 
-        // hopefully can manipulate the string here and pass to checkout
+    }
+
+    handleExpiration = ({ target: { name, value } }) => {
+        console.log('name', name);
+        console.log('value', value);
+        this.setState((prevState) => ({
+             expiration: {
+                ...prevState['expiration'],
+                [name]: value 
+             }
+            }));
     }
 
     render(){
@@ -79,7 +81,6 @@ class Payment extends React.Component {
         const paymentInputs = [
             {name: 'cardHolderName', labelText: 'Card Holder Name *', type: 'text', error: 'cardHolderNameError' },
             {name: 'cardNumber', labelText: 'Card Number *', type: 'text', error: 'cardNumberError' },
-            {name: 'cardSecurity', labelText: 'CVV *', type: 'text', error: 'cardSecurityError' },
         ]
 
 
@@ -116,10 +117,29 @@ class Payment extends React.Component {
 
                         />
                     ))}
-                         {/* probably need another function here to actually update state correctly */}
-                    < ExpirationDropdown 
-                        onChange={this.handleExpiration}
-                    />
+                    <div>Expiration Date: </div>
+                    {(cardError
+                        && cardError['cardExpirationError']
+                        && cardError['cardExpirationError'].length > 1)
+                        ? <div className={s.error}>{cardError['cardExpirationError']}</div>
+                        : null
+                    }
+                    <div className={s.dropdownContainer}>
+                        < ExpirationDropdown 
+                            className={s.dropdown}
+                            name="month"
+                            onChange={this.handleExpiration}
+                            onBlur={this.updateCardExpiration}
+                            data={months}
+                        />
+                        < ExpirationDropdown 
+                            className={s.dropdown}
+                            name="year"
+                            onChange={this.handleExpiration}
+                            onBlur={this.updateCardExpiration}
+                            data={years}
+                        />
+                    </div>
                     <InputBase
                             key={'cardSecurity'}
                             name={'cardSecurity'}

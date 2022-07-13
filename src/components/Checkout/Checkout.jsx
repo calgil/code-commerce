@@ -296,6 +296,13 @@ class Checkout extends React.Component {
         this.props.toggleShowCheckout();
     }
 
+    applyDiscount = () => {
+        const { subtotal } = this.state;
+        let discountAmount = subtotal * 0.2;
+        let updatedSubtotal = subtotal - discountAmount;
+        this.updateSubtotalState(updatedSubtotal);
+    }
+
     render(){
         const { 
             subtotal, 
@@ -362,6 +369,7 @@ class Checkout extends React.Component {
                              shippingCost={shippingCost}
                              shippingData={shippingData}
                              cardData={cardData}
+                             applyDiscount={this.applyDiscount}
                           />
                           {( showCart ) && 
                             <div className={s.btnContainer}>

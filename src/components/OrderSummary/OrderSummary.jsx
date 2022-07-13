@@ -1,12 +1,29 @@
 import React from "react";
-import SummaryItem from "../SummaryItem/SummaryItem";
 import s from './OrderSummary.module.css';
 import { CARDICON } from "../../utilities/constants";
+import InputBase from "../InputBase/InputBase";
+import SummaryItem from "../SummaryItem/SummaryItem";
 
 class OrderSummary extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            promoCode: '',
+        }
+    }
+
+    handlePromoCodeChange = ({ target: { value } }) => {
+        const { promoCode } = this.state;
+        if ( promoCode !== 'valid') {
+            this.setState({ promoCode: value })
+        }
+    }
+
+    validatePromoCode = () => {
+        const { promoCode } = this.state;
+        if (promoCode === 'Discount') {
+            this.props.applyDiscount()
+            this.setState({ promoCode: 'valid' })
         }
     }
 
@@ -30,6 +47,25 @@ class OrderSummary extends React.Component {
             <div className={s.summary}>
                 <h3 className={s.title}>Order Summary</h3>
                 <div className={s.orderInfo}>
+                    <p>Promo Code</p>
+                    <div className={s.promoCode}>
+                         <InputBase
+                              name='discount'
+                              type='text'
+                              onChange={this.handlePromoCodeChange}
+                              placeholder='Discount'
+                          />
+                          <InputBase
+                             type='submit'
+                             value='Apply Promo'
+                             onClick={this.validatePromoCode}
+                          />
+                    </div>
+                    { this.state.promoCode === 'valid'
+                        ? <p className={s.success}>Discount Applied</p>
+                        : ''
+                    }
+                    <hr />
                     {(showShipping || showPayment || showConfirmation )&&
                         <div className={s.cartItems}>
                                 {userShoppingCart.length > 1 
