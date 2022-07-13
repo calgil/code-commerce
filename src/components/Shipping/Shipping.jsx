@@ -15,8 +15,14 @@ class Shipping extends React.Component {
     handleBlur = ({ target: { name, value } }) => this.props.handleShippingValidations(name, value);
 
     handleInputData = ({ target: { name, value } }) => {
+        console.log(name);
         this.props.updateData('shippingData', name, value)
     }
+
+    getCountryDataToParent = (value) => {
+        this.props.updateData('shippingData', 'country', value)
+    }
+
 
     handleRadioChange = ({ target: { value } }) => {
         const {updateShippingCost} = this.props
@@ -73,8 +79,7 @@ class Shipping extends React.Component {
                 <CountryDropdown 
                     key={'country'}
                     name={'country'}
-                    handleBlur={this.handleBlur}
-                    handleInputData={this.handleInputData}
+                    getCountryDataToParent={this.getCountryDataToParent}
                     error={
                         (shippingError
                         && shippingError['countryError']
@@ -82,12 +87,9 @@ class Shipping extends React.Component {
                         ? shippingError['countryError']
                         : null
                     }
-                    // value={shippingData && shippingData['country']}
-
                 />
 
                 <div className={s.shippingMethod}>
-                    {/* I could potentially add checked attribute, bring shippingCost */}
                     { typeof shippingCost === 'number'
                         ? null
                         : <div className={s.shippingCostError}>Please select shipping option:</div> 
@@ -96,30 +98,20 @@ class Shipping extends React.Component {
                     <div>
                         <RadioBase 
                             name='method'
-                            labelText='Standard'
+                            labelText='Delivery in 4-6 Business Days -Free ($40 min)'
                             type='radio'
                             value='Standard'
                             onChange={this.handleRadioChange}
-                            // checked={shippingCost === 0
-                            //         ? true
-                            //         : false
-                            //     }
                         />
-                        <span className={s.shippingDetails}>Delivery in 4-6 Business Days -Free ($40 min)</span>
                     </div>
                     <div>
                         <RadioBase 
                             name='method'
-                            labelText='Express'
+                            labelText='Delivery in 1-3 Business Days -$5.00'
                             type='radio'
                             value='Express'
                             onChange={this.handleRadioChange}
-                            // checked={shippingCost === 5
-                            //         ? true
-                            //         : false
-                            //     }
                         />
-                        <span className={s.shippingDetails}>Delivery in 1-3 Business Days -$5.00</span>
                     </div>
                 </div>
             </form>
