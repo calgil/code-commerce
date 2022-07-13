@@ -25,9 +25,9 @@ class Checkout extends React.Component {
         super(props);
         this.state = {
             checkoutStatus: {
-                showCart: true, 
+                showCart: false, 
                 showShipping: false, 
-                showPayment: false,
+                showPayment: true,
                 showConfirmation: false,
             },
             subtotal: 0,
@@ -177,7 +177,7 @@ class Checkout extends React.Component {
 
     checkShippingError = () => {
         const { shippingData, shippingError } = this.state;
-        let errorValue = {};
+        let errorValue = [];
         let isError = false;
         
         Object.keys(shippingData).forEach((val) => {
@@ -186,15 +186,13 @@ class Checkout extends React.Component {
                 isError = true;
             }
         })
-        this.setState({ shippingError: errorValue })
+        this.setState((prevState) => ({ 
+            ...prevState.shippingError,
+             ...errorValue
+             }))
         Object.keys(shippingError).forEach((val) => {
             if(shippingError[val]) {
                 isError = true;
-            }
-        })
-        Object.keys(shippingData).forEach((val) => {
-            if(shippingData[val].length) {
-                this.handleShippingValidations(val, shippingData[val]);
             }
         })
         return isError;
@@ -212,6 +210,7 @@ class Checkout extends React.Component {
     }
 
     handleCardValidations = (type, value) => {
+        console.log('up', type, value);
         let errorText;
         switch(type){
             case 'cardHolderName':
@@ -257,7 +256,7 @@ class Checkout extends React.Component {
 
     checkPaymentError = () => {
         const { cardData, cardError } = this.state;
-        let errorValue = {};
+        let errorValue = [];
         let isError = false;
         
         Object.keys(cardData).forEach((val) => {
@@ -266,15 +265,16 @@ class Checkout extends React.Component {
                 isError = true;
             }
         })
-        this.setState(({ cardError: errorValue }))
+        console.log('error',errorValue);
+        this.setState((prevState) => ({
+            cardError: {
+                ...prevState.cardError,
+                ...errorValue
+            }
+        }))
         Object.keys(cardError).forEach((val) => {
             if(cardError[val]) {
                 isError = true;
-            }
-        })
-        Object.keys(cardData).forEach((val) => {
-            if(cardData[val].length) {
-                this.handleShippingValidations(val, cardData[val]);
             }
         })
         return isError;
@@ -282,6 +282,7 @@ class Checkout extends React.Component {
 
     checkPayment = () => {
         let checkError = this.checkPaymentError();
+        console.log('error', checkError);
         if(!checkError) {
             this.goToConfirmationScreen();
         }
@@ -401,7 +402,7 @@ class Checkout extends React.Component {
                                 <InputBase 
                                     className={s.checkoutBtn}
                                     type="submit"
-                                    value='Checkout'
+                                    value='Pay'
                                     onClick={this.checkPayment}
                             />
                             </div>

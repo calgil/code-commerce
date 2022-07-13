@@ -8,7 +8,6 @@ class OrderSummary extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            promoCode: '',
         }
     }
 
@@ -19,7 +18,8 @@ class OrderSummary extends React.Component {
         }
     }
 
-    validatePromoCode = () => {
+    validatePromoCode = (e) => {
+        e.preventDefault();
         const { promoCode } = this.state;
         if (promoCode === 'Discount') {
             this.props.applyDiscount()
@@ -28,6 +28,7 @@ class OrderSummary extends React.Component {
     }
 
     render() {
+        const { promoCode } = this.state;
         const { 
             cartSubtotal, 
             userShoppingCart, 
@@ -48,7 +49,10 @@ class OrderSummary extends React.Component {
                 <h3 className={s.title}>Order Summary</h3>
                 <div className={s.orderInfo}>
                     <p>Promo Code</p>
-                    <div className={s.promoCode}>
+                    <form 
+                        className={s.promoCode}
+                        onSubmit={this.validatePromoCode}
+                    >
                          <InputBase
                               name='discount'
                               type='text'
@@ -60,11 +64,18 @@ class OrderSummary extends React.Component {
                              value='Apply Promo'
                              onClick={this.validatePromoCode}
                           />
-                    </div>
-                    { this.state.promoCode === 'valid'
+                    </form>
+                    { promoCode
+                    ? promoCode === 'valid' 
+                        ? <p className={s.success}>Discount Applied!</p> 
+                        : <p className={s.fail}>Discount not applied</p>
+                    : ''
+
+                    }
+                    {/* {   (this.state.promoCode === 'valid')
                         ? <p className={s.success}>Discount Applied</p>
                         : ''
-                    }
+                    } */}
                     <hr />
                     {(showShipping || showPayment || showConfirmation )&&
                         <div className={s.cartItems}>
