@@ -174,7 +174,12 @@ class Checkout extends React.Component {
                 }))
         }
     }
-
+    // this function is almost identical to checkCardError
+    //  I tried to make a function that could do both to be DRY
+    // but I wanted isError boolean, errorValue array 
+    // and the name of the object to be updated in state and 
+    // didn't know how to make that work in another function ...sorry 
+    
     checkShippingError = () => {
         const { shippingData, shippingError } = this.state;
         let errorValue = [];
