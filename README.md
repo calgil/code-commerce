@@ -1,5 +1,14 @@
 # Getting Started with Create React App
 
+CodeCommerce project
+
+Sign In info: 
+    email: person@email.com
+    password: Aaaaaaaa1!
+    
+ Promo Code: Discount
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
