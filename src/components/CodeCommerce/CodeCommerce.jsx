@@ -1,21 +1,21 @@
 import React from "react";
 import s from './CodeCommerce.module.css'
 import SignIn from "../SignIn/SignIn";
-import DisplayShop from "../DisplayShop/DisplayShop";
 import Checkout from "../Checkout/Checkout";
 import Header from "../Header/Header";
 import { SHOPPER_URL, SHOPPER_API } from "../../utilities/constants";
+import ShopItem from "../ShopItem/ShopItem";
 
 class CodeCommerce extends React.Component {
-    constructor() {
-        super();
-        this.state = {
+        state = {
             loggedIn: false,
             showSignIn: false, 
             showCheckout: false,
             userShoppingCart: [],
+            shopItems: [],
+            loading: false,
+            error: false,
         }
-    }
 
     addItemToCart = (newItem) => {
         newItem.quantity += 1
@@ -61,6 +61,7 @@ class CodeCommerce extends React.Component {
     }
 
     componentDidMount = async () => {
+        this.setState({ loading: true})
         try {
         const url = new URL(SHOPPER_URL); 
         let headers = {
@@ -77,6 +78,7 @@ class CodeCommerce extends React.Component {
             const json = await response.json()
             const data = json.data
                 .map(item => ({
+                    id: item.id,
                     name: item.name,
                     desc: item.description,
                     price: { 
@@ -84,19 +86,33 @@ class CodeCommerce extends React.Component {
                             formatted: item.price.formatted_with_symbol 
                             },
                     image: item.assets[0].url,
+                    variants: item.variant_groups[0],
 
                 }) )
-            console.log(data);
+                console.log(json);
+                console.log(data);
+            this.setState({ 
+                shopItems: data, 
+                loading: false,
+            });
         } else {
+            this.setState({ 
+                error: true, 
+                loading: false,
+            });
             // panic
         }
         } catch(err) {
+            this.setState({ 
+                error: true, 
+                loading: false,
+            });
             console.error("There was an error", err)
         }
     }
 
     render(){
-        const { showSignIn, showCheckout, loggedIn, userShoppingCart} = this.state;
+        const { showSignIn, showCheckout, loggedIn, userShoppingCart, loading, error, shopItems} = this.state;
         return (
             <div className={s.main}>
                 { !showCheckout && 
@@ -116,9 +132,14 @@ class CodeCommerce extends React.Component {
                     signInVisibility={this.toggleShowSignIn}
                 /> }
                 { !showCheckout &&
-                    <DisplayShop 
-                        updateShoppingCart={this.updateShoppingCart}
-                    />
+                    !loading ? <div className={s.displayShop}>
+                        {shopItems.map((item) => (
+                        <ShopItem 
+                            key={item.id}
+                            updateShoppingCart={this.updateShoppingCart}
+                            data={item}
+                        />
+                        ))} </div> : <div>Loading...</div>
                 }
                 { showCheckout && 
                     <Checkout

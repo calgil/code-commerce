@@ -17,3 +17,12 @@
     background-repeat: no-repeat;
     background-color: transparent;
 }
+
+.displayShop {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding-top: 20px;
+}
