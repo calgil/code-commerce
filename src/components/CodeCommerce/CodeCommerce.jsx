@@ -4,6 +4,7 @@ import SignIn from "../SignIn/SignIn";
 import DisplayShop from "../DisplayShop/DisplayShop";
 import Checkout from "../Checkout/Checkout";
 import Header from "../Header/Header";
+import { SHOPPER_URL, SHOPPER_API } from "../../utilities/constants";
 
 class CodeCommerce extends React.Component {
     constructor() {
@@ -57,6 +58,41 @@ class CodeCommerce extends React.Component {
         this.setState({
             showCheckout: !this.state.showCheckout,
         });
+    }
+
+    componentDidMount = async () => {
+        try {
+        const url = new URL(SHOPPER_URL); 
+        let headers = {
+            "X-Authorization": SHOPPER_API,
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+        }
+
+        const response = await fetch(url, {
+            method: "GET",
+            headers: headers,
+        })
+        if(response.ok) {
+            const json = await response.json()
+            const data = json.data
+                .map(item => ({
+                    name: item.name,
+                    desc: item.description,
+                    price: { 
+                            raw: item.price.raw, 
+                            formatted: item.price.formatted_with_symbol 
+                            },
+                    image: item.assets[0].url,
+
+                }) )
+            console.log(data);
+        } else {
+            // panic
+        }
+        } catch(err) {
+            console.error("There was an error", err)
+        }
     }
 
     render(){
