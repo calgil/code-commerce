@@ -1,8 +1,9 @@
 import React from "react";
 import s from './ShopItem.module.css';
 
-const ShopItem = ({ data }) => {
-    const {id, name, image, price, variants} = data;
+const ShopItem = ({ data, ...props }) => {
+    const {id, name, image, price, } = data;
+    // variants categories
    return (
         <div className={s.itemContainer}>
             <div className={s.imgContainer}>
@@ -13,7 +14,7 @@ const ShopItem = ({ data }) => {
             <button
                 value={id}
                 className={s.add}
-                // onClick={props.addToCart}
+                onClick={props.addToCart}
             >
                 Add to Cart
             </button>

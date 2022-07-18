@@ -3,7 +3,7 @@ import s from './Cart.module.css';
 import CartItem from "../CartItem/CartItem";
 
 const Cart = ({...props}) => {
-    const { shoppingCartItems } = props;
+    const { cart } = props;
 
     return (
             <div className={s.cartBody}>
@@ -16,14 +16,11 @@ const Cart = ({...props}) => {
                         <span>Total Price</span>
                     </div>
                 </div>
-                {shoppingCartItems.map((item) => (
+                {cart.map((item) => (
                     <CartItem 
                         key={item.name}
-                        name={item.name}
-                        img={item.image}
-                        price={item.price}
-                        quantity={item.quantity}
                         updateQuantity={props.updateQuantity}
+                        data={item}
                     />
                 ))}
             </div>

@@ -26,3 +26,17 @@
     margin: 0 auto;
     padding-top: 20px;
 }
+
+.loading, .error { 
+    text-align: center; 
+    margin-top: 20px;
+    font-size: 25px;
+}
+
+.loading { 
+    color: #eee;
+}
+
+.error {
+    color: red;
+}

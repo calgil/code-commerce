@@ -341,7 +341,7 @@ class Checkout extends React.Component {
                     <div className={s.checkoutBody}>
                          {  ( showCart ) &&
                          <Cart 
-                             shoppingCartItems={cart}
+                             cart={cart}
                              updateQuantity={this.updateQuantity}
                          />}
                          { ( showShipping ) && 
