@@ -8,19 +8,12 @@ const Header = ({ ...props }) => (
             <header className={s.header}>
                 <h1 className={s.gear}><a href="./">Gear Shop</a></h1>
                 <div className={s.links}>
-                    <div>
-                        <input 
-                            className={s.login} 
-                            type="button" 
-                            value={'Login'}
-                            onClick={props.toggleShowSignIn}
-                         />
-                    </div>
-                    <div
+                    <button
                         onClick={props.handleCartClick}
+                        className={s.cart}
                     >
                         <FontAwesomeIcon
-                            className={s.cart}
+                            // className={s.cart}
                             icon={faCartShopping}
                             // onClick={props.handleCartClick}
                          />
@@ -28,7 +21,13 @@ const Header = ({ ...props }) => (
                             ? <span className={s.cartCount}>{props.cartCount}</span>
                             : ''
                          }
-                    </div>
+                    </button>
+                    <button
+                        className={s.login}
+                        onClick={props.toggleShowSignIn}
+                    >
+                        Login
+                    </button>
                 </div>
             </header>
         </div>

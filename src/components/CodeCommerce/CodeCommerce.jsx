@@ -100,7 +100,6 @@ class CodeCommerce extends React.Component {
                 error: true, 
                 loading: false,
             });
-            // panic
         }
         } catch(err) {
             this.setState({ 

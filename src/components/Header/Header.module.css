@@ -30,21 +30,31 @@
 .login, .cart { 
     cursor: pointer;
     transition: all 200ms;
+    padding: 10px;
+    color: #eee;
     font-size: 20px;
  }
 
-.login:hover, .cart:hover { color: #333;}
-
 .login {
-    margin-right: 1rem;
+    margin-left: 20px;
     border: none;
     background-color: transparent;
     color: #eee;
-    font-size: 1rem;
 }
 
 .cart {
     position: relative;
+    background-color: transparent;
+    border: none;
+}
+
+.login:hover, .cart:hover {
+     color: white;
+}
+
+.login:focus, .cart:focus,
+.gear a:focus {
+    outline: 1px solid #eee;
 }
 
 .cartCount {

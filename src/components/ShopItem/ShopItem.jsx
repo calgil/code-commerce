@@ -5,10 +5,10 @@ const ShopItem = ({ data }) => {
     const {id, name, image, price, variants} = data;
    return (
         <div className={s.itemContainer}>
-            <h4 className={s.itemName}>{name}</h4>
             <div className={s.imgContainer}>
                 <img src={image} alt={name} />
             </div>
+            <h4 className={s.itemName}>{name}</h4>
             <div className={s.price}>{price.formatted}</div>
             <button
                 value={id}
