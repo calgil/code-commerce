@@ -2,23 +2,30 @@ import React from "react";
 import s from "./SummaryItem.module.css";
 import { itemImgs } from "../../utilities/constants";
 
-const SummaryItem = ({ ...props }) => (
-    <div className={s.summaryItem}>
-        <h4 className={s.name}>{props.name}</h4>
+const SummaryItem = ({ data }) => {
+    const { name, image, quantity,  price, } = data;
+
+    return (
+        <div className={s.summaryItem}>
+        <h4 className={s.name}>{name}</h4>
         <div className={s.itemContainer}>
             <div className={s.thumbnailImg}>
-                <img src={itemImgs[props.img]} alt={props.name} />
+                <img src={image} alt={name} />
             </div>
             <div className={s.info}>
                 <div className={s.quantityContainer}>
-                    <span className={s.quantity}>Qty: {props.quantity}</span>
+                    <span className={s.quantity}>Qty: {quantity}</span>
                 </div>
                 <div className={s.price}>
-                    <span>${(props.quantity * props.price).toFixed(2) }</span>
+                    <span>${(quantity * price.raw).toFixed(2) }</span>
                 </div>
             </div>
         </div>
+        <hr />
     </div>
-)
+    )
+}
+    
+
 
 export default SummaryItem;

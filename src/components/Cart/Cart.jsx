@@ -16,7 +16,7 @@ const Cart = ({...props}) => {
                         <span>Total Price</span>
                     </div>
                 </div>
-                {cart.map((item) => (
+                {cart.length && cart.map((item) => (
                     <CartItem 
                         key={item.name}
                         updateQuantity={props.updateQuantity}

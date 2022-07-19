@@ -23,8 +23,8 @@ const CartItem = ({ data, ...props }) => {
                         <div className={s.priceContainer}>
                         <span>{price.formatted}</span>
                     </div>
-                    {/* <div className={s.qtyContainer}> */}
-                        {/* <select 
+                    <div className={s.qtyContainer}>
+                         <select 
                             className={s.qtySelect}
                             // onChange={this.handleQuantityChange} 
                             name={name} 
@@ -41,16 +41,17 @@ const CartItem = ({ data, ...props }) => {
                             <option value={7}>7</option>
                             <option value={8}>8</option>
                             <option value={9}>9</option>
-                        </select> */}
+                        </select>
                         {/* <button 
                             className={s.removeBtn} 
                             onClick={this.removeItem}
                         >
                             Remove */}
                         {/* </button> */}
-                    {/* </div> */}
+                     </div>
                 <div className={s.totalPriceContainer}>
-                    <span className={s.price}>${(1 * price.raw).toFixed(2)}</span>
+                    {/* quantity times price */}
+                    <span className={s.price}>${(price.raw).toFixed(2)}</span>
                 </div>
             </div>
             </div>

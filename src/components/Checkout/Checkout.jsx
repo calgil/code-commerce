@@ -25,8 +25,8 @@ class Checkout extends React.Component {
         super(props);
         this.state = {
             checkoutStatus: {
-                showCart: true, 
-                showShipping: false, 
+                showCart: false, 
+                showShipping: true, 
                 showPayment: false,
                 showConfirmation: false,
             },
@@ -76,6 +76,7 @@ class Checkout extends React.Component {
 
     componentDidMount() {
         this.calcSubtotal(this.props.cart);
+        console.log(this.props.cart);
     }
 
     static getDerivedStateFromProps(props) {
@@ -174,11 +175,6 @@ class Checkout extends React.Component {
                 }))
         }
     }
-    // this function is almost identical to checkCardError
-    //  I tried to make a function that could do both to be DRY
-    // but I wanted isError boolean, errorValue array 
-    // and the name of the object to be updated in state and 
-    // didn't know how to make that work in another function ...sorry 
     
     checkShippingError = () => {
         const { shippingData, shippingError } = this.state;
@@ -371,7 +367,7 @@ class Checkout extends React.Component {
                          <OrderSummary
                              cartSubtotal={subtotal}
                              checkoutStatus={checkoutStatus}
-                             userShoppingCart={cart}
+                             cart={cart}
                              shippingCost={shippingCost}
                              shippingData={shippingData}
                              cardData={cardData}

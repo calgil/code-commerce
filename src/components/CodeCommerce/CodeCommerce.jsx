@@ -29,13 +29,18 @@ class CodeCommerce extends React.Component {
         updatedItem.quantity++
     }
 
+    addItemToCart = (item) => {
+        item.quantity = 1;
+        console.log(item);
+        this.setState((prevState) => ({ userShoppingCart: [...prevState.userShoppingCart, item] }))
+    }
+
     addToCart = ({ target: {value} }) => {
         const { data } = this.state;
-        let found = data.find(item => item.id === value);
-        console.log(found);
-        // have to think about inventory here to show OUT OF STOCK 
-
-       this.setState((prevState) => ({ userShoppingCart: [...prevState.userShoppingCart, found] }))
+        let newItem = data.find(item => item.id === value);
+        newItem.inventory >= 1
+        ? this.addItemToCart(newItem)
+        : console.log('no inventory');
     }
 
     updateCart = (shoppingCart) => {
@@ -103,7 +108,7 @@ class CodeCommerce extends React.Component {
                     image: item.assets[0].url,
                     variants: item.variant_groups[0],
                 }));
-            
+            console.log(data);
             this.setState({ 
                 data: data, 
                 loading: false,

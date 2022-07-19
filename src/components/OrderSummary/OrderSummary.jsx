@@ -4,6 +4,7 @@ import { CARDICON } from "../../utilities/constants";
 import InputBase from "../InputBase/InputBase";
 import SummaryItem from "../SummaryItem/SummaryItem";
 
+
 class OrderSummary extends React.Component {
     constructor(props) {
         super(props);
@@ -31,7 +32,7 @@ class OrderSummary extends React.Component {
         const { promoCode } = this.state;
         const { 
             cartSubtotal, 
-            userShoppingCart, 
+            cart, 
             shippingCost, 
             checkoutStatus, 
             shippingData,
@@ -72,27 +73,20 @@ class OrderSummary extends React.Component {
                     : ''
 
                     }
-                    {/* {   (this.state.promoCode === 'valid')
-                        ? <p className={s.success}>Discount Applied</p>
-                        : ''
-                    } */}
                     <hr />
                     {(showShipping || showPayment || showConfirmation )&&
                         <div className={s.cartItems}>
-                                {userShoppingCart.length > 1 
-                                ?  <span className={s.itemCount}>{userShoppingCart.length} items in cart</span>
-                                : <span className={s.itemCount}>{userShoppingCart.length} item in cart</span>
-                                }
-                            {userShoppingCart.map((item) => (
+                            {cart.length > 1 
+                            ?  <span className={s.itemCount}>{cart.length} items in cart</span>
+                            : <span className={s.itemCount}>{cart.length} item in cart</span>
+                            }
+                            {cart.map((item) => (
                                 <SummaryItem 
                                     key={item.name}
-                                    name={item.name}
-                                    img={item.image}
-                                    price={item.price}
-                                    quantity={item.quantity}
+                                    data={item}
                                 />
-                            ))}
-                            <hr />
+                            ))
+                            }
                         </div>
                     }
                     { (showPayment || showConfirmation) &&
