@@ -13,7 +13,7 @@ import MASTER_CARD_ICON from '.././assets/cc-assets/masterCard.png'
 import DISCOVER_ICON from '.././assets/cc-assets/discover.png'
 
 
-export const SHOPPER_URL = "https://api.chec.io/v1/products?";
+export const SHOPPER_URL = "https://api.chec.io/v1/products";
 export const SHOPPER_API = process.env.REACT_APP_SHOPPER_API;
 
 export const items = [

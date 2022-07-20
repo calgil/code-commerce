@@ -5,6 +5,7 @@ import Checkout from "../Checkout/Checkout";
 import Header from "../Header/Header";
 import { SHOPPER_URL, SHOPPER_API } from "../../utilities/constants";
 import ShopItem from "../ShopItem/ShopItem";
+import DetailPage from "../DetailPage/DetailPage";
 
 class CodeCommerce extends React.Component {
         state = {
@@ -15,6 +16,8 @@ class CodeCommerce extends React.Component {
             data: [],
             loading: false,
             error: false,
+            detailPageOpen: false,
+            detailData: [],
         }
 
     // addItemToCart = (newItem) => {
@@ -63,8 +66,24 @@ class CodeCommerce extends React.Component {
     toggleShowCheckout = () => {
         this.setState({
             showCheckout: !this.state.showCheckout,
+            detailPageOpen: false,
         });
     }
+
+    closeDetailsPage = () => {
+        this.setState({
+            detailPageOpen: false,
+            detailData: [],
+        })
+    }
+
+    openDetailPage = (id, data) => {
+        console.log('detail Page', id, data);
+        this.setState({
+            detailPageOpen: true,
+            detailData: data
+        });
+    };
 
     componentDidMount = async () => {
         this.setState({ loading: true});
@@ -89,7 +108,7 @@ class CodeCommerce extends React.Component {
             method: "GET",
             headers: headers,
         });
-        console.log('response');
+        // console.log('response');
 
 
         if(response.ok) {
@@ -129,10 +148,20 @@ class CodeCommerce extends React.Component {
     };
 
     render(){
-        const { showSignIn, showCheckout, loggedIn, userShoppingCart, loading, error, data} = this.state;
+        const { 
+            showSignIn, 
+            showCheckout, 
+            loggedIn, 
+            userShoppingCart, 
+            loading, 
+            error, 
+            data, 
+            detailPageOpen,
+            detailData
+        } = this.state;
         return (
             <div className={s.main}>
-                 { !showCheckout && 
+                 { (!showCheckout && !detailPageOpen) && 
                     <div className={s.hero}>
                     </div>
                 } 
@@ -148,15 +177,23 @@ class CodeCommerce extends React.Component {
                     changeLoginStatus={this.updateLogin}
                     signInVisibility={this.toggleShowSignIn}
                 /> } 
-                { !showCheckout &&
-                    !loading ? <div className={s.displayShop}>
+                { (!showCheckout && !detailPageOpen) && 
+                    !loading && <div className={s.displayShop}>
                         {data.map((item) => (
                         <ShopItem 
                             key={item.id}
-                            addToCart={this.addToCart}
+                            openDetailPage={this.openDetailPage}
                             data={item}
                         />
-                        ))} </div> : <div className={s.loading}>Loading...</div>
+                        ))} </div>
+                }
+                { loading && <div className={s.loading}>Loading...</div>}
+                {   detailPageOpen && 
+                    <DetailPage 
+                        data={detailData}
+                        closeDetailsPage={this.closeDetailsPage}
+                        addToCart={this.addToCart}
+                    />
                 }
                 { (!showCheckout && !loading && error) &&
                     <div className={s.error}>There was an error! Failed to load</div>
